@@ -1,0 +1,29 @@
+---
+title: "Trilogy"
+author: "Folklore Taxonomies and Annotated Texts"
+output: 
+  revealjs::revealjs_presentation:
+    theme: moon
+    highlight: zenburn
+    reveal_options:
+      progress: true
+      slideNumber: true
+---
+
+## Contents
+
+- `tmi`: the *Thompson Motif Index*
+- `atu`: the *Aarne-Thompson-Uther* Tale Type Index
+- `aft`: some *Annotated Folktales*, initially seeded with [D.L. Ashliman’s corpus](https://sites.pitt.edu/~dash/folktexts.html)
+
+## Why it exists/uses
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+## How you can help
+
+- Filing issues
+- Submitting manual changes
+- Annotating tales
