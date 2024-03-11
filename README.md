@@ -16,7 +16,7 @@ Please complete the following steps prior to attending the workshop, in order to
 
 1. Install R on the computer you will use at the workshop session. Website: 
 2. Install RStudio Desktop version on the computer you will use at the workshop session.
-3. Open RStudio and copy/paste the following code in the "Console" area: `install.packages(c("tidyverse","rmarkdown","distill","plotly"))`
+3. Open RStudio and copy/paste the following code in the "Console" area: `install.packages(c("tidyverse","rmarkdown","distill","revealjs","plotly"))`
 4. In the upper left corner of RStudio, select "Open Project..." and navigate to the folder for this repository ("trilogy_workshop").  Select the "trilogy_workshop.Rproj" file.
 5. Check to make sure that you have the "Files" from this repository, which should now appear in the lower right-hand pane of your RStudio window.
 
