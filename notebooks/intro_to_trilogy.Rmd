@@ -1,0 +1,61 @@
+---
+title: "Trilogy Workshop"
+description: |
+  An introduction to using data science tools for folklore taxonomy and text analysis
+author:
+  - name: Josh Hagedorn 
+    url: https://www.j-hagedorn.com/
+    orcid_id: 0000-0001-8026-7562
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    code_folding: true
+---
+
+# Load packages and trilogy data sets
+
+Let's start by loading the materials we'll need:
+
+- the R packages we'll use
+- the `trilogy` datasets
+
+The main package we'll use is the [tidyverse](https://www.tidyverse.org/), which is actually a collection of R packages with consistent design philosophy, grammar, and data structures.
+
+To pull the current versions of the datasets, we'll follow the steps outlined in the [Getting Started > Use in Reproducible Research](https://github.com/j-hagedorn/trilogy/blob/master/docs/vignettes/getting_started.md#use-in-reproducible-research) vignette.  That's why you'll see a long, alphanumeric code in the links below, specifying precisely what version of the data is being used.
+
+```{r setup}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+
+tmi <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/490a989d199d9440f9210bfe6ede797b03c4e26e/data/tmi.csv")
+atu_df <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/490a989d199d9440f9210bfe6ede797b03c4e26e/data/atu_df.csv")
+atu_seq <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/490a989d199d9440f9210bfe6ede797b03c4e26e/data/atu_seq.csv")
+aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/490a989d199d9440f9210bfe6ede797b03c4e26e/data/aft.csv")
+
+```
+
+This allows us to explicitly reference a version of the data so that any research we do can be precisely replicated by others.  For instance, if you wanted to pull an old (and not yet cleaned-up) version of the `aft` dataset, you'd just need to go back in the GitHub history and run the following:
+
+```{r old_aft, echo=TRUE}
+old_aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/f0fb12d108734847114f17980b05686a26305e38/data/aat.csv")
+```
+
+
+# Inspecting the data
+
+## Motifs
+
+## Tale Types
+
+## Annotated Tales
+
+# 
+
+- Joining together data sets by primary key
+- First analysis: coverage of motif index in the tale type index
+- Visualization
+- Adding citations
+- Where to go next?
+
+
+
