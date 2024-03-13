@@ -20,5 +20,12 @@ Please complete the following steps prior to attending the workshop, in order to
 4. In the upper left corner of RStudio, select "Open Project..." and navigate to the folder for this repository ("trilogy_workshop").  Select the "trilogy_workshop.Rproj" file.
 5. Check to make sure that you have the "Files" from this repository, which should now appear in the lower right-hand pane of your RStudio window.
 
+### In the workshop
+
+We'll be going through:
+
+1. [Intro slides](https://j-hagedorn.github.io/trilogy_workshop/slides/slides.html#/)
+2. Example code exercises in [notebooks](https://j-hagedorn.github.io/trilogy_workshop/notebooks/intro_to_trilogy.html)
+
 ### Other resources
 
