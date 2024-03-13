@@ -45,12 +45,24 @@ old_aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/f0fb12
 
 ## Motifs
 
-The `tmi` is grouped into chapters, and has multiple nested levels of 
+The `tmi` is comprised of `r n_distinct(tmi$id)` distinct motifs.  It is grouped into chapters, including: *`r paste(unique(tmi$chapter_name), collapse = ", ")`*
 
-```{r}
-t <-
-  tmi %>%
-  select(chapter_id,id,level,starts_with("level_")) 
+Under the chapter level, it has multiple nested levels of groups, which are named as follows:
+
+- `level_0` = What Thompson labelled 'Grand divisions', sections divisible by 100.
+- `level_1` = Smaller divisions end with '0', These are defined at intervals of 10.
+- `level_2`-`level_6` = Various sections with multiple layers of subdivisions
+
+The excerpt below shows how this hierarchy structure is represented in the flat dataset:
+
+```{r, layout="l-body-outset"}
+tmi %>%
+  filter(level_2 == "B122") %>%
+  select(chapter_id,id,motif_name,level,starts_with("level_")) %>%
+  select(-level_5,-level_6) %>%
+  arrange(id) %>%
+  rmarkdown::paged_table()
+  
 ```
 
 Note that some motifs are not fit into the hierarchical level format.  This occurs when there is a zero indicator at one of the decimal indices, since this creates a break in the hierarchical structure.  For instance, in the "A111.3" section, we find A111.3 as a parent motif for A111.3.1-3, but there is no A111.3.0 to serve as a parent for A111.3.0.1.
@@ -63,17 +75,9 @@ tmi %>%
   rmarkdown::paged_table()
 ```
 
+The table below shows how many motifs (i.e. `n_motifs`) are in each chapter, and each level (*if you expand the row*).
 
-```
-- A (Chapter)
-  |
-  -- A 
-```
-
-
-The table below shows
-
-```{r}
+```{r tmi_summary_tbl}
 library(reactable)
 tmi %>%
   group_by(chapter_name,level) %>%
