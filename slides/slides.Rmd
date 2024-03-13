@@ -5,10 +5,18 @@ output:
   revealjs::revealjs_presentation:
     theme: moon
     highlight: zenburn
+    transition: fade
     reveal_options:
       progress: true
       slideNumber: true
 ---
+
+## What?
+
+- Tidy data of folklore taxonomies and annotated texts
+- A common platform for reproducible research
+- Open for use with a [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license
+- Available on [GitHub](https://github.com/j-hagedorn/trilogy)
 
 ## Contents
 
@@ -16,14 +24,14 @@ output:
 - `atu`: the *Aarne-Thompson-Uther* Tale Type Index
 - `aft`: some *Annotated Folktales*, initially seeded with [D.L. Ashliman’s corpus](https://sites.pitt.edu/~dash/folktexts.html)
 
-## Why it exists/uses
+## Purpose
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+- Allow reproducible research 
+- Less data cleaning, more analysis
+- Support collaboration
 
 ## How you can help
 
-- Filing issues
+- [Filing issues](https://github.com/j-hagedorn/trilogy/issues/new)
 - Submitting manual changes
-- Annotating tales
+- [Annotating tales](https://github.com/j-hagedorn/trilogy/blob/master/docs/vignettes/getting_started.md#growing-and-refining-the-corpus) and adding to the corpus
