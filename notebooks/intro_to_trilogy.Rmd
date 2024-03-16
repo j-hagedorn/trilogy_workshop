@@ -45,7 +45,7 @@ old_aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/f0fb12
 
 ## Motifs
 
-The `tmi` is comprised of `r n_distinct(tmi$id)` distinct motifs.  It is grouped into chapters, including: *`r paste(unique(tmi$chapter_name), collapse = ", ")`*
+The `tmi` is comprised of `r n_distinct(tmi$id)` distinct motifs.  It is grouped into `r n_distinct(tmi$chapter_id)` chapters, including: *`r paste(unique(tmi$chapter_name), collapse = ", ")`*
 
 Under the chapter level, it has multiple nested levels of groups, which are named as follows:
 
@@ -97,7 +97,12 @@ tmi %>%
 ```
 
 
+
+---
+
 ## Tale Types
+
+
 
 ## Annotated Tales
 
