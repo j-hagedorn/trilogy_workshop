@@ -45,7 +45,7 @@ old_aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/f0fb12
 
 ## Motifs
 
-The `tmi` is comprised of `r n_distinct(tmi$id)` distinct motifs.  It is grouped into `r n_distinct(tmi$chapter_id)` chapters, including: *`r paste(unique(tmi$chapter_name), collapse = ", ")`*
+The `tmi` is comprised of `r n_distinct(tmi$id)` distinct motifs.^[Recall that Yarlott and Finlayson (2016) counted "46,248 motifs and sub-motifs, 41,796 of which have references to tales or tale types." While there is a difference, it is minimal, and it is unclear what they mean by sub-motifs.]  It is grouped into `r n_distinct(tmi$chapter_id)` chapters, including: *`r paste(unique(tmi$chapter_name), collapse = ", ")`*.
 
 Under the chapter level, it has multiple nested levels of groups, which are named as follows:
 
@@ -65,15 +65,7 @@ tmi %>%
   
 ```
 
-Note that some motifs are not fit into the hierarchical level format.  This occurs when there is a zero indicator at one of the decimal indices, since this creates a break in the hierarchical structure.  For instance, in the "A111.3" section, we find A111.3 as a parent motif for A111.3.1-3, but there is no A111.3.0 to serve as a parent for A111.3.0.1.
-
-```{r}
-tmi %>%
-  filter(str_detect(id,"^A111.3")) %>%
-  select(id, motif_name) %>%
-  arrange(id) %>%
-  rmarkdown::paged_table()
-```
+Note that some motifs are not fit into the hierarchical level format.  This occurs when there is a zero indicator at one of the decimal indices, since this creates a break in the hierarchical structure.  For instance, in the "B122" section, we find B122.1 as a parent motif for B122.1.1-2, but there is no B122.0 to serve as a parent for B122.0.1.
 
 The table below shows how many motifs (i.e. `n_motifs`) are in each chapter, and each level (*if you expand the row*).
 
@@ -96,6 +88,38 @@ tmi %>%
   )
 ```
 
+The most populated level of the index (i.e. '3') is that of the initial *subdivision*, indicating that there are frequently no splits made in the motif identified.  While the index structure would allow for each subsequent level (i.e. levels 4 - 6+) to have increasing numbers of more finely grained motifs, these either do not exist or have not been filled in.
+
+
+```{r}
+tmi %>%
+  ggplot(aes(x = level)) +
+  geom_histogram(stat="count") +
+  theme_minimal() + 
+  theme(plot.title.position = "plot") +
+  labs(
+    title = "Most motifs are in the subdivisions",
+    subtitle = "From chapters (level 0) through subdivisions (levels 3-6)",
+    x = "Depth within index",
+    y = "Distinct motif entries"
+  )
+```
+
+```{r}
+summary_df <-
+  tmi %>%
+  group_by(chapter_id,chapter_name,level_0,level_1,level_2,level_3) %>%
+  summarize(n = n()) %>% 
+  ungroup() %>%
+  left_join(tmi %>% select(id,level_0_name = motif_name), by = c("level_0" = "id")) %>%
+  left_join(tmi %>% select(id,level_1_name = motif_name), by = c("level_1" = "id")) %>%
+  left_join(tmi %>% select(id,level_2_name = motif_name), by = c("level_2" = "id")) %>%
+  left_join(tmi %>% select(id,level_3_name = motif_name), by = c("level_3" = "id")) %>%
+  select(
+    starts_with("chapter_"),starts_with("level_0"),
+    starts_with("level_1"),starts_with("level_2"),starts_with("level_3"),n
+  )
+```
 
 
 ---
