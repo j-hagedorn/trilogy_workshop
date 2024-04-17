@@ -2,7 +2,7 @@ This repository is a companion for the workshop conducted at the [19th Congress 
 
 ### Before the workshop
 
-Please complete the following steps prior to attending the workshop, in order to assure that you will be able to meaningfully participate without encountering technical issues.  The setup will likely take about 30 minutes, so be sure to give yourself enough time:
+Please complete the following steps prior to attending the workshop, in order to assure that you will be able to meaningfully participate without encountering technical issues. We will not have time during the workshop to troubleshoot technical installation issues on individual users' machines. The setup will likely take about 30 minutes, so be sure to give yourself enough time:
 
 **Set up GitHub and make a local fork of this repository**
 
@@ -16,7 +16,7 @@ Please complete the following steps prior to attending the workshop, in order to
 
 1. [Install R and RStudio](https://posit.co/download/rstudio-desktop/) on the computer you will use at the workshop session. 
 3. Open RStudio and copy/paste the following code in the "Console" area: `install.packages(c("tidyverse","rmarkdown","distill","revealjs","plotly"))`
-4. In the upper right corner of RStudio, select "Open Project..." and navigate to the folder for this repository ("trilogy_workshop").  Select the "trilogy_workshop.Rproj" file.
+4. In the upper right corner of RStudio, select "Open Project..." and navigate to the folder for this repository ("trilogy_workshop").  Select the `trilogy_workshop.Rproj` file.
 5. Check that the "Files" from this repository now appear in the lower right-hand pane of your RStudio window.
 
 ### During the workshop
@@ -27,4 +27,8 @@ We'll be going through:
 2. Example code exercises in [notebooks](https://j-hagedorn.github.io/trilogy_workshop/notebooks/intro_to_trilogy.html)
 
 ### Other resources
+
+Hagedorn, J., & Darányi, S. (2022). Bearing a Bag-of-Tales: An Open Corpus of Annotated Folktales for Reproducible Research. *Journal of Open Humanities Data*, 8(0), 16. [doi.org/10.5334/johd.78](https://doi.org/10.5334/johd.78)
+
+Eklund, J., Hagedorn, J. & Darányi, S. (2023). Teaching Tale Types to a Computer: A First Experiment with the Annotated Folktales Collection. *Fabula*, 64(1-2), 92-106. [doi.org/10.1515/fabula-2023-0005](https://doi.org/10.1515/fabula-2023-0005)
 
