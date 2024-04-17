@@ -1,8 +1,9 @@
 ---
-title: "Trilogy"
-author: "Folklore Taxonomies and Annotated Texts"
+title: "Opening the Trilogy"
+author: "Folklore Taxonomies and Annotated Texts for Reproducible Research"
 output: 
   revealjs::revealjs_presentation:
+    center: true
     theme: moon
     highlight: zenburn
     transition: fade
@@ -26,12 +27,13 @@ output:
 
 ## Purpose
 
-- Allow reproducible research 
+- Promote [reproducible research](https://doi.org/10.1146/annurev-publhealth-012420-105110) of folklore narrative
 - Less data cleaning, more analysis
-- Support collaboration
+- [Let even distant teams collaborate simultaneously](https://docs.github.com/en/get-started/start-your-journey/about-github-and-git)
+- Extensible base of knowledge *via* user contributions
 
 ## How you can help
 
-- [Filing issues](https://github.com/j-hagedorn/trilogy/issues/new)
-- Submitting manual changes
+- [Filing issues](https://github.com/j-hagedorn/trilogy/issues/new) if you find errors or have suggestions
+- Submitting manual corrections as needed
 - [Annotating tales](https://github.com/j-hagedorn/trilogy/blob/master/docs/vignettes/getting_started.md#growing-and-refining-the-corpus) and adding to the corpus
