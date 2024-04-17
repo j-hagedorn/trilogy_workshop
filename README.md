@@ -1,4 +1,4 @@
-This repository is a companion for the workshop conducted at the {NAME} conference at Riga, Latvia. The workshop is intended for a beginner audience of folklorists who are interested in learning about the use of data science tools to analyze folktale texts, types, and motifs using the `trilogy` ensemble of datasets.  For this workshop, we will be using the `R` statistical programming language, as well as `Git` to share code. Please read the following instructions in preparation for your attendance at the workshop.
+This repository is a companion for the workshop conducted at the [19th Congress of the International Society for Folk Narrative Research](https://en.lfk.lv/isfnr2024) related to the topic *Digital Approaches in Narrative Research: Opportunities and Challenges*. The workshop is intended for a beginner audience of folklorists who are interested in learning about the use of data science tools to analyze folktale texts, types, and motifs using the `trilogy` ensemble of datasets.  For this workshop, we will be using the `R` statistical programming language, as well as `Git` to share code. Please read the following instructions in preparation for your attendance at the workshop.
 
 ### Before the workshop
 
@@ -6,21 +6,20 @@ Please complete the following steps prior to attending the workshop, in order to
 
 **Set up GitHub and make a local fork of this repository**
 
-1. Sign up for a GitHub account
-2. Install Git on the computer you will use at the workshop session.
-3. Install Github Desktop on the computer you will use at the workshop session.
-4. Fork this repository by pressing ...
-5. Clone a copy of your forked repository locally onto your computer.
+1. [Sign up for a GitHub account](https://github.com/signup)
+2. [Install Git](https://git-scm.com/downloads) on the computer you will use at the workshop session.
+3. [Install Github Desktop](https://desktop.github.com/) on the computer you will use at the workshop session. Open it and follow the instructions to connect it to your personal GitHub account.
+4. Fork this GitHub repository (*by clicking 'Fork' at the top of this page*) to create a copy under your own account.
+5. Clone your forked GitHub repository to your computer so that you can edit the files locally on your own machine. You can do this in GitHub Desktop by selecting *File* |> *Clone repository* and then selecting `{your_username}/trilogy_workshop`
 
 **Set up the RStudio environment**
 
-1. Install R on the computer you will use at the workshop session. Website: 
-2. Install RStudio Desktop version on the computer you will use at the workshop session.
+1. [Install R and RStudio](https://posit.co/download/rstudio-desktop/) on the computer you will use at the workshop session. 
 3. Open RStudio and copy/paste the following code in the "Console" area: `install.packages(c("tidyverse","rmarkdown","distill","revealjs","plotly"))`
-4. In the upper left corner of RStudio, select "Open Project..." and navigate to the folder for this repository ("trilogy_workshop").  Select the "trilogy_workshop.Rproj" file.
-5. Check to make sure that you have the "Files" from this repository, which should now appear in the lower right-hand pane of your RStudio window.
+4. In the upper right corner of RStudio, select "Open Project..." and navigate to the folder for this repository ("trilogy_workshop").  Select the "trilogy_workshop.Rproj" file.
+5. Check that the "Files" from this repository now appear in the lower right-hand pane of your RStudio window.
 
-### In the workshop
+### During the workshop
 
 We'll be going through:
 
