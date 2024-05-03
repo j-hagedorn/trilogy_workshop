@@ -139,4 +139,63 @@ summary_df <-
 - Where to go next?
 
 
+---
+
+## Summary Statistics
+
+```{r}
+
+x <- 
+  atu_seq %>% 
+  select(motif,atu_id) %>% 
+  mutate(in_atu = T) %>%
+  left_join(
+    aft %>% select(atu_id) %>% mutate(in_aft = T),
+    by = "atu_id"
+  ) %>%
+  distinct(motif, in_atu, in_aft) %>%
+  mutate(in_aft = if_else(is.na(in_aft),F,T)) %>%
+  # Don't keep multiple rows per motif, count as present (i.e. 'TRUE')
+  group_by(motif, in_atu) %>%
+  filter(in_aft == max(in_aft))
+
+df <-
+  tmi %>%
+  select(motif = id) %>%
+  distinct(motif) %>%
+  left_join(
+    x,
+    by = "motif"
+  ) %>%
+  mutate(
+    in_tmi = T,
+    in_atu = if_else(is.na(in_atu),F,T),
+    in_aft = if_else(is.na(in_aft),F,T)
+  ) 
+
+sum(df$in_tmi)
+sum(df$in_atu)
+sum(df$in_aft)
+
+```
+```{r}
+un <-
+  atu_seq %>% 
+  select(motif) %>%
+  distinct() %>%
+  anti_join(tmi, by = c("motif" = "id"))
+
+un <-
+  aft %>%
+  select(atu_id) %>%
+  distinct() %>%
+  anti_join(atu_seq %>% select(atu_id) %>% distinct(), by = "atu_id")
+```
+
+
+-- How many types vs motifs are in the ATU and the AFT? How many motifs are there in the TMI (answered)? What's the percentage of motifs used in the ATU as contrasted with the TMI (answered)?
+-- Where I lost track is the two columns. Eg for the number of ATU types, 2250 is fine, but what is 2249 in the second column plus the remark?
+-- Given the 'type = motif string with equiprobable motifs in forkings' working hypothesis, 68245 strings as the answer is well, shocking, but that's it.
+-- The next top ten variants seem to refer to the AFT, is that correct? The inserted image has some strange numbers though. First, what does n mean? Or, 46332, which is 1 more than 46331 in the column, which is 110 more than the number of motifs in the TMI?
+-- Practically the same question about all the n values in the 2nd column for the top ten, reproducing the image.
 

@@ -12,28 +12,57 @@ output:
       slideNumber: true
 ---
 
-## What?
+# Soon you'll know...
+
+- __What it is.__  
+  - List data assets which make up the `r bsicons::bs_icon("stack")` `trilogy`
+
+- __How to use it.__ 
+  - Use tales and taxonomies with data science tools
+  - Create a pipeline for novel, reproducible research
+  - Contribute fixes, extensions or annotated texts.
+
+# What is it?
 
 - Tidy data of folklore taxonomies and annotated texts
 - A common platform for reproducible research
 - Open for use with a [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license
 - Available on [GitHub](https://github.com/j-hagedorn/trilogy)
 
-## Contents
+## `r bsicons::bs_icon("border-style")` Contents
 
 - `tmi`: the *Thompson Motif Index*
 - `atu`: the *Aarne-Thompson-Uther* Tale Type Index
-- `aft`: some *Annotated Folktales*, initially seeded with [D.L. Ashliman’s corpus](https://sites.pitt.edu/~dash/folktexts.html)
+- `aft`: some *Annotated Folktales*, seeded with [D.L. Ashliman’s corpus](https://sites.pitt.edu/~dash/folktexts.html)
 
-## Purpose
+## How `r bsicons::bs_icon("stack")`'s parts relate
+
+![Relation of Trilogy elements](TMI_ATU_AFT.png)
+
+# What isn't it?
+
+## `r bsicons::bs_icon("exclamation-triangle-fill")` Some limitations
+
+- These taxonomies were designed for paper, and still need some adjustment
+- Motifs are not a periodic table of elements
+- Lacks oral elements of tale-telling (*e.g. dramatic pauses*)
+
+# How can you use it?
+
+## `r bsicons::bs_icon("vector-pen")` Research
 
 - Promote [reproducible research](https://doi.org/10.1146/annurev-publhealth-012420-105110) of folklore narrative
 - Less data cleaning, more analysis
-- [Let even distant teams collaborate simultaneously](https://docs.github.com/en/get-started/start-your-journey/about-github-and-git)
+- [Let even distant teams collaborate](https://docs.github.com/en/get-started/start-your-journey/about-github-and-git)
 - Extensible base of knowledge *via* user contributions
 
-## How you can help
+## `r bsicons::bs_icon("noise-reduction")` Cleaning
 
-- [Filing issues](https://github.com/j-hagedorn/trilogy/issues/new) if you find errors or have suggestions
-- Submitting manual corrections as needed
+- Data quality improves as data is used
+- [File issues](https://github.com/j-hagedorn/trilogy/issues/new) if you find errors or have suggestions
+- *Even better*, submit corrections as pull requests `r bsicons::bs_icon("sign-merge-left-fill")`
+
+## `r bsicons::bs_icon("database-fill-add")` Extending
+
 - [Annotating tales](https://github.com/j-hagedorn/trilogy/blob/master/docs/vignettes/getting_started.md#growing-and-refining-the-corpus) and adding to the corpus
+- *Do you have students who are annotating tale texts as part of their classes?* Consider collecting and uploading correct annotations to grow this repository
