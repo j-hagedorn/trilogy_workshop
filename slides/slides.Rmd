@@ -39,6 +39,10 @@ output:
 
 ![Relation of Trilogy elements](TMI_ATU_AFT.png)
 
+## Notes
+
+- Annotations are at the tale level, not the phrase level.
+
 # What isn't it?
 
 ## `r bsicons::bs_icon("exclamation-triangle-fill")` Some limitations
@@ -67,4 +71,5 @@ output:
 
 - Extend the base of knowledge *via* user contributions
 - [Annotate tales](https://github.com/j-hagedorn/trilogy/blob/master/docs/vignettes/getting_started.md#growing-and-refining-the-corpus) and add to the corpus
+- If you add a new corpus of annotated texts (*e.g. The 1,001 Nights*), we'll make a new release that you can publish with a unique DOI (*e.g. in JOHD*).
 - *Do you have students who are annotating tale texts as part of their classes?* Consider collecting and uploading correct annotations to grow this repository
