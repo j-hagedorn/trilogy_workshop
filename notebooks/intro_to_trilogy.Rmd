@@ -1,16 +1,19 @@
 ---
 title: "Trilogy Workshop"
-description: |
-  An introduction to using data science tools for folklore taxonomy and text analysis
-author:
-  - name: Josh Hagedorn 
-    url: https://www.j-hagedorn.com/
-    orcid_id: 0000-0001-8026-7562
+author: "Josh Hagedorn" 
 date: "`r Sys.Date()`"
 output: 
-  distill::distill_article:
-    code_folding: true
+  html_document:
+    code_folding: hide
+    theme:
+      version: 5
+      bootswatch: flatly
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(tidyverse)
+```
 
 # Load packages and trilogy data sets
 
@@ -23,29 +26,24 @@ The main package we'll use is the [tidyverse](https://www.tidyverse.org/), which
 
 To pull the current versions of the datasets, we'll follow the steps outlined in the [Getting Started > Use in Reproducible Research](https://github.com/j-hagedorn/trilogy/blob/master/docs/vignettes/getting_started.md#use-in-reproducible-research) vignette.  That's why you'll see a long, alphanumeric code in the links below, specifying precisely what version of the data is being used.
 
-```{r setup}
-knitr::opts_chunk$set(echo = FALSE)
-library(tidyverse)
-
+```{r load}
 tmi <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/490a989d199d9440f9210bfe6ede797b03c4e26e/data/tmi.csv")
 atu_df <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/490a989d199d9440f9210bfe6ede797b03c4e26e/data/atu_df.csv")
 atu_seq <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/490a989d199d9440f9210bfe6ede797b03c4e26e/data/atu_seq.csv")
 aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/490a989d199d9440f9210bfe6ede797b03c4e26e/data/aft.csv")
-
 ```
 
 This allows us to explicitly reference a version of the data so that any research we do can be precisely replicated by others.  For instance, if you wanted to pull an old (and not yet cleaned-up) version of the `aft` dataset, you'd just need to go back in the GitHub history and run the following:
 
-```{r old_aft, echo=TRUE}
+```{r old_aft, eval=FALSE, include=TRUE}
 old_aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/f0fb12d108734847114f17980b05686a26305e38/data/aat.csv")
 ```
 
-
-# Inspecting the data
-
-## Motifs
+# Motifs
 
 The `tmi` is comprised of `r n_distinct(tmi$id)` distinct motifs.^[Recall that Yarlott and Finlayson (2016) counted "46,248 motifs and sub-motifs, 41,796 of which have references to tales or tale types." While there is a difference, it is minimal, and it is unclear what they mean by sub-motifs.]  It is grouped into `r n_distinct(tmi$chapter_id)` chapters, including: *`r paste(unique(tmi$chapter_name), collapse = ", ")`*.
+
+## Hierarchy {.tabset .tabset-pills}
 
 Under the chapter level, it has multiple nested levels of groups, which are named as follows:
 
@@ -53,7 +51,9 @@ Under the chapter level, it has multiple nested levels of groups, which are name
 - `level_1` = Smaller divisions end with '0', These are defined at intervals of 10.
 - `level_2`-`level_6` = Various sections with multiple layers of subdivisions
 
-The excerpt below shows how this hierarchy structure is represented in the flat dataset:
+### Flat format
+
+The excerpt below shows how this hierarchy structure is represented in the 'flat' dataset:
 
 ```{r, layout="l-body-outset"}
 tmi %>%
@@ -62,8 +62,27 @@ tmi %>%
   select(-level_5,-level_6) %>%
   arrange(id) %>%
   rmarkdown::paged_table()
-  
 ```
+
+### Distribution by level
+
+The most populated level of the index (i.e. '3') is that of the initial *subdivision*, indicating that there are frequently no splits made in the motif identified.  While the index structure would allow for each subsequent level (i.e. levels 4 - 6+) to have increasing numbers of more finely grained motifs, these either do not exist or have not been filled in.
+
+```{r}
+tmi %>%
+  ggplot(aes(x = level)) +
+  geom_histogram(stat="count") +
+  theme_minimal() + 
+  theme(plot.title.position = "plot") +
+  labs(
+    title = "Most motifs are in the subdivisions",
+    subtitle = "From chapters (level 0) through subdivisions (levels 3-6)",
+    x = "Depth within index",
+    y = "Distinct motif entries"
+  )
+```
+
+### Gaps
 
 Note that some motifs are not fit into the hierarchical level format.  This occurs when there is a zero indicator at one of the decimal indices, since this creates a break in the hierarchical structure.  For instance, in the "B122" section, we find B122.1 as a parent motif for B122.1.1-2, but there is no B122.0 to serve as a parent for B122.0.1.
 
@@ -88,23 +107,6 @@ tmi %>%
   )
 ```
 
-The most populated level of the index (i.e. '3') is that of the initial *subdivision*, indicating that there are frequently no splits made in the motif identified.  While the index structure would allow for each subsequent level (i.e. levels 4 - 6+) to have increasing numbers of more finely grained motifs, these either do not exist or have not been filled in.
-
-
-```{r}
-tmi %>%
-  ggplot(aes(x = level)) +
-  geom_histogram(stat="count") +
-  theme_minimal() + 
-  theme(plot.title.position = "plot") +
-  labs(
-    title = "Most motifs are in the subdivisions",
-    subtitle = "From chapters (level 0) through subdivisions (levels 3-6)",
-    x = "Depth within index",
-    y = "Distinct motif entries"
-  )
-```
-
 ```{r}
 summary_df <-
   tmi %>%
@@ -121,16 +123,13 @@ summary_df <-
   )
 ```
 
-
 ---
 
-## Tale Types
+# Tale Types
 
 
 
-## Annotated Tales
-
-# 
+# Annotated Tales
 
 - Joining together data sets by primary key
 - First analysis: coverage of motif index in the tale type index
@@ -143,7 +142,7 @@ summary_df <-
 
 ## Summary Statistics
 
-```{r}
+```{r overlaps}
 
 x <- 
   atu_seq %>% 
@@ -178,7 +177,9 @@ sum(df$in_atu)
 sum(df$in_aft)
 
 ```
-```{r}
+
+
+```{r anti_joins}
 un <-
   atu_seq %>% 
   select(motif) %>%
@@ -198,4 +199,12 @@ un <-
 -- Given the 'type = motif string with equiprobable motifs in forkings' working hypothesis, 68245 strings as the answer is well, shocking, but that's it.
 -- The next top ten variants seem to refer to the AFT, is that correct? The inserted image has some strange numbers though. First, what does n mean? Or, 46332, which is 1 more than 46331 in the column, which is 110 more than the number of motifs in the TMI?
 -- Practically the same question about all the n values in the 2nd column for the top ten, reproducing the image.
+-- How many motifs are there in the AFT?
+-- How many percent of the TMI motifs (46222) are there in the AFT?
+-- How many tale types are there in the AFT?
+-- Based on the 2250 ATU type strings, how many possible strings (ways to tell a tale) exist? The suggested number, 68245, is beyond me, please explain your respective reasoning;
+-- I cannot decode one of my slide titles, "ATU type combination network (4696 connections among x types)", does that ring a bell? Could x refer to the 2250 types?
+-- average number of motifs which constitute a type 
+-- the average number of forkings if they can be calculated
+
 
