@@ -45,24 +45,26 @@ output:
 
 - These taxonomies were designed for paper, and still need some adjustment
 - Motifs are not a periodic table of elements
-- Lacks oral elements of tale-telling (*e.g. dramatic pauses*)
+- Lacks oral elements of tale-telling (*e.g. pauses, sighs*)
 
 # How can you use it?
 
 ## `r bsicons::bs_icon("vector-pen")` Research
 
-- Promote [reproducible research](https://doi.org/10.1146/annurev-publhealth-012420-105110) of folklore narrative
-- Less data cleaning, more analysis
+- Promote [reproducible research](https://doi.org/10.1146/annurev-publhealth-012420-105110) of folklore narratives
+- Similar to use of standard datasets and taxonomies in  [genomics](https://scholar.google.com/scholar?cites=5360173642221970934&as_sdt=80000005&sciodt=0,23&hl=en)
 - [Let even distant teams collaborate](https://docs.github.com/en/get-started/start-your-journey/about-github-and-git)
-- Extensible base of knowledge *via* user contributions
+
 
 ## `r bsicons::bs_icon("noise-reduction")` Cleaning
 
+- Less data cleaning, more analysis
 - Data quality improves as data is used
 - [File issues](https://github.com/j-hagedorn/trilogy/issues/new) if you find errors or have suggestions
 - *Even better*, submit corrections as pull requests `r bsicons::bs_icon("sign-merge-left-fill")`
 
 ## `r bsicons::bs_icon("database-fill-add")` Extending
 
-- [Annotating tales](https://github.com/j-hagedorn/trilogy/blob/master/docs/vignettes/getting_started.md#growing-and-refining-the-corpus) and adding to the corpus
+- Extend the base of knowledge *via* user contributions
+- [Annotate tales](https://github.com/j-hagedorn/trilogy/blob/master/docs/vignettes/getting_started.md#growing-and-refining-the-corpus) and add to the corpus
 - *Do you have students who are annotating tale texts as part of their classes?* Consider collecting and uploading correct annotations to grow this repository
