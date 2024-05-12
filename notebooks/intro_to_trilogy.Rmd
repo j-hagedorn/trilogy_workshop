@@ -194,6 +194,15 @@ un <-
 ```
 
 
+n motifs
+n types
+n motifs in types
+n atu motifs not in tmi
+n tales
+n types in tales
+n aft types not in atu
+n motifs in tales
+
 -- How many types vs motifs are in the ATU and the AFT? How many motifs are there in the TMI (answered)? What's the percentage of motifs used in the ATU as contrasted with the TMI (answered)?
 -- Where I lost track is the two columns. Eg for the number of ATU types, 2250 is fine, but what is 2249 in the second column plus the remark?
 -- Given the 'type = motif string with equiprobable motifs in forkings' working hypothesis, 68245 strings as the answer is well, shocking, but that's it.
