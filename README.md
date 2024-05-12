@@ -15,7 +15,7 @@ Please complete the following steps prior to attending the workshop, in order to
 **Set up the RStudio environment**
 
 1. [Install R and RStudio](https://posit.co/download/rstudio-desktop/) on the computer you will use at the workshop session. 
-3. Open RStudio and copy/paste the following code in the "Console" area: `install.packages(c("tidyverse","rmarkdown","distill","revealjs","plotly"))`
+3. Open RStudio and copy/paste the following code in the "Console" area: `install.packages(c("tidyverse","rmarkdown","bslib","revealjs","plotly","reactable"))`
 4. In the upper right corner of RStudio, select "Open Project..." and navigate to the folder for this repository ("trilogy_workshop").  Select the `trilogy_workshop.Rproj` file.
 5. Check that the "Files" from this repository now appear in the lower right-hand pane of your RStudio window.
 
@@ -27,6 +27,8 @@ We'll be going through:
 2. Example code exercises in [notebooks](https://j-hagedorn.github.io/trilogy_workshop/notebooks/intro_to_trilogy.html)
 
 ### Other resources
+
+Hagedorn, J. (2023). trilogy: Reference datasets for myth and folktale motifs [Software]. *GitHub*. https://github.com/j-hagedorn/trilogy
 
 Hagedorn, J., & Darányi, S. (2022). Bearing a Bag-of-Tales: An Open Corpus of Annotated Folktales for Reproducible Research. *Journal of Open Humanities Data*, 8(0), 16. [doi.org/10.5334/johd.78](https://doi.org/10.5334/johd.78)
 
