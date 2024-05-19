@@ -1,4 +1,6 @@
-This repository is a companion for the workshop conducted at the [19th Congress of the International Society for Folk Narrative Research](https://en.lfk.lv/isfnr2024) related to the topic *Digital Approaches in Narrative Research: Opportunities and Challenges*. The workshop is intended for a beginner audience of folklorists who are interested in learning about the use of data science tools to analyze folktale texts, types, and motifs using the `trilogy` ensemble of datasets.  For this workshop, we will be using the `R` statistical programming language, as well as `Git` to share code. Please read the following instructions in preparation for your attendance at the workshop.
+This repository is a companion for the workshop conducted at the [19th Congress of the International Society for Folk Narrative Research](https://en.lfk.lv/isfnr2024) related to the topic *Digital Approaches in Narrative Research: Opportunities and Challenges*. The workshop is intended for a beginner audience of folklorists who are interested in learning about the use of data science tools to analyze folktale texts, types, and motifs using the `trilogy` ensemble of datasets.  For this workshop, we will be using the `R` statistical programming language, as well as `Git` to share code. Please read the following instructions in preparation for your attendance at the workshop.  
+
+__Note:__ If you run into issues or have questions during the installation of the necessary software and packages, please [file an issue here](https://github.com/j-hagedorn/trilogy_workshop/issues/new) describing your question so that I can update the documentation to help you and other potential attendees.  Excited for our time together in Riga!
 
 ### Before the workshop
 
@@ -34,3 +36,6 @@ Hagedorn, J., & Darányi, S. (2022). Bearing a Bag-of-Tales: An Open Corpus of A
 
 Eklund, J., Hagedorn, J. & Darányi, S. (2023). Teaching Tale Types to a Computer: A First Experiment with the Annotated Folktales Collection. *Fabula*, 64(1-2), 92-106. [doi.org/10.1515/fabula-2023-0005](https://doi.org/10.1515/fabula-2023-0005)
 
+### Disclaimer
+
+*Presenter and repository author is not liable for any issues which result from the downloading of software or use of code on either a personal or organizational device.*
