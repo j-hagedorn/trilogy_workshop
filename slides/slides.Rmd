@@ -24,8 +24,11 @@ output:
 
 # What is it?
 
+## `r bsicons::bs_icon("signpost-split-fill")` Purpose
+
 - Tidy data of folklore taxonomies and annotated texts
 - A common platform for reproducible research
+- Less data cleaning, more analysis
 - Open for use with a [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license
 - Available on [GitHub](https://github.com/j-hagedorn/trilogy)
 
@@ -47,7 +50,7 @@ output:
 
 ## `r bsicons::bs_icon("exclamation-triangle-fill")` Some limitations
 
-- These taxonomies were designed for paper, and still need some adjustment
+- These taxonomies were designed for `r bsicons::bs_icon("journal-text")`, not `r bsicons::bs_icon("file-code")`
 - Motifs are not a periodic table of elements
 - Lacks oral elements of tale-telling (*e.g. pauses, sighs*)
 
@@ -55,21 +58,23 @@ output:
 
 ## `r bsicons::bs_icon("vector-pen")` Research
 
-- Promote [reproducible research](https://doi.org/10.1146/annurev-publhealth-012420-105110) of folklore narratives
-- Similar to use of standard datasets and taxonomies in  [genomics](https://scholar.google.com/scholar?cites=5360173642221970934&as_sdt=80000005&sciodt=0,23&hl=en)
-- [Let even distant teams collaborate](https://docs.github.com/en/get-started/start-your-journey/about-github-and-git)
+- Engage [reproducible research](https://doi.org/10.1146/annurev-publhealth-012420-105110) of folklore narratives
+- [Let distant research teams collaborate](https://docs.github.com/en/get-started/start-your-journey/about-github-and-git)
+- Parallels use of standard data and taxonomies in  [genomics](https://scholar.google.com/scholar?cites=5360173642221970934&as_sdt=80000005&sciodt=0,23&hl=en)
 
 
 ## `r bsicons::bs_icon("noise-reduction")` Cleaning
 
-- Less data cleaning, more analysis
 - Data quality improves as data is used
 - [File issues](https://github.com/j-hagedorn/trilogy/issues/new) if you find errors or have suggestions
 - *Even better*, submit corrections as pull requests `r bsicons::bs_icon("sign-merge-left-fill")`
 
+## `r bsicons::bs_icon("tag-fill")` Annotating Tales
+
+- Submit a corpus of [annotated tales](https://github.com/j-hagedorn/trilogy/blob/master/docs/vignettes/getting_started.md#growing-and-refining-the-corpus) as a pull request to grow the `r bsicons::bs_icon("stack")`
+- If you add a new corpus (*e.g. The 1,001 Nights*), we'll make a unique DOI you can publish (*e.g. in [JOHD](https://openhumanitiesdata.metajnl.com/)*)
+
+
 ## `r bsicons::bs_icon("database-fill-add")` Extending
 
 - Extend the base of knowledge *via* user contributions
-- [Annotate tales](https://github.com/j-hagedorn/trilogy/blob/master/docs/vignettes/getting_started.md#growing-and-refining-the-corpus) and add to the corpus
-- If you add a new corpus of annotated texts (*e.g. The 1,001 Nights*), we'll make a new release that you can publish with a unique DOI (*e.g. in JOHD*).
-- *Do you have students who are annotating tale texts as part of their classes?* Consider collecting and uploading correct annotations to grow this repository
