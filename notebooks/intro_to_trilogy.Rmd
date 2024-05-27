@@ -27,10 +27,10 @@ The main package we'll use is the [tidyverse](https://www.tidyverse.org/), which
 To pull the current versions of the datasets, we'll follow the steps outlined in the [Getting Started \> Use in Reproducible Research](https://github.com/j-hagedorn/trilogy/blob/master/docs/vignettes/getting_started.md#use-in-reproducible-research) vignette. That's why you'll see a long, alphanumeric code in the links below, specifying precisely what version of the data is being used.
 
 ```{r load}
-tmi <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/490a989d199d9440f9210bfe6ede797b03c4e26e/data/tmi.csv")
-atu_df <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/490a989d199d9440f9210bfe6ede797b03c4e26e/data/atu_df.csv")
-atu_seq <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/490a989d199d9440f9210bfe6ede797b03c4e26e/data/atu_seq.csv")
-aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/490a989d199d9440f9210bfe6ede797b03c4e26e/data/aft.csv")
+tmi <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/tmi.csv")
+atu_df <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/atu_df.csv")
+atu_seq <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/atu_seq.csv")
+aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/aft.csv")
 ```
 
 This allows us to explicitly reference a version of the data so that any research we do can be precisely replicated by others. For instance, if you wanted to pull an old (and not yet cleaned-up) version of the `aft` dataset, you'd just need to go back in the GitHub history and run the following:
@@ -170,6 +170,20 @@ rm(type_lists)
 ```
 
 
+```{r anti_joins}
+un <-
+  atu_seq %>% 
+  select(motif) %>%
+  distinct() %>%
+  anti_join(tmi, by = c("motif" = "id"))
+
+un <-
+  aft %>%
+  select(atu_id) %>%
+  distinct() %>%
+  anti_join(atu_seq %>% select(atu_id) %>% distinct(), by = "atu_id")
+```
+
 ------------------------------------------------------------------------
 
 # Motifs
@@ -279,22 +293,6 @@ summary_df <-
 ------------------------------------------------------------------------
 
 
-
-```{r anti_joins}
-un <-
-  atu_seq %>% 
-  select(motif) %>%
-  distinct() %>%
-  anti_join(tmi, by = c("motif" = "id"))
-
-un <-
-  aft %>%
-  select(atu_id) %>%
-  distinct() %>%
-  anti_join(atu_seq %>% select(atu_id) %>% distinct(), by = "atu_id")
-```
-
-Consider visualizing intersections between sets using an [upset graph](https://github.com/hms-dbmi/UpSetR/).
 
 
 
