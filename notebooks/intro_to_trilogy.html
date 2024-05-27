@@ -3942,6 +3942,9 @@ in the ATU. This means that the tale types from the ATU make use of only
 <li>Of the motifs which are present in the ATU (<code>atu_seq</code>),
 most (n = 2969/3799) do <strong>not</strong> have corresponding
 annotated texts in the <code>aft</code>.</li>
+<li>There are 826 motifs present in the tale types represented by the
+<code>aft</code>. This is a minuscule 1.8% of the total available motifs
+in the <code>tmi</code>.</li>
 <li>There are a small number of odd instances (n = 34), where a motif ID
 is present in <code>atu_seq</code>, but not in the <code>tmi</code>. In
 4 of these instances, there is one or more corresponding tale text in
@@ -3985,28 +3988,6 @@ underscores the need for more annotated texts.</li>
   select(atu_id) %&gt;%
   distinct() %&gt;%
   anti_join(atu_seq %&gt;% select(atu_id) %&gt;% distinct(), by = &quot;atu_id&quot;)</code></pre>
-<ul>
-<li>Given the ‘type = motif string with equiprobable motifs in forkings’
-working hypothesis, 68245 strings as the answer is well, shocking, but
-that’s it.</li>
-<li>The next top ten variants seem to refer to the AFT, is that correct?
-The inserted image has some strange numbers though. First, what does n
-mean? Or, 46332, which is 1 more than 46331 in the column, which is 110
-more than the number of motifs in the TMI?</li>
-<li>Practically the same question about all the n values in the 2nd
-column for the top ten, reproducing the image.</li>
-<li>How many percent of the TMI motifs (46222) are there in the
-AFT?</li>
-<li>How many tale types are there in the AFT?</li>
-<li>Based on the 2250 ATU type strings, how many possible strings (ways
-to tell a tale) exist? The suggested number, 68245, is beyond me, please
-explain your respective reasoning;</li>
-<li>I cannot decode one of my slide titles, “ATU type combination
-network (4696 connections among x types)”, does that ring a bell? Could
-x refer to the 2250 types?</li>
-<li>average number of motifs which constitute a type – the average
-number of forkings if they can be calculated</li>
-</ul>
 <hr />
 </div>
 </div>
@@ -4096,8 +4077,8 @@ tmi %&gt;%
       n_motifs = colDef(aggregate = &quot;sum&quot;)
     )
   )</code></pre>
-<div class="reactable html-widget html-fill-item" id="htmlwidget-b6d3d3603605c3ddce92" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-b6d3d3603605c3ddce92">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"chapter_name":["Animals","Animals","Animals","Animals","Animals","Animals","Animals","Animals","Captives and Fugitives","Captives and Fugitives","Captives and Fugitives","Captives and Fugitives","Captives and Fugitives","Captives and Fugitives","Captives and Fugitives","Captives and Fugitives","Chance and Fate","Chance and Fate","Chance and Fate","Chance and Fate","Chance and Fate","Chance and Fate","Chance and Fate","Cruelty","Cruelty","Cruelty","Cruelty","Cruelty","Cruelty","Cruelty","Cruelty","Death","Death","Death","Death","Death","Death","Death","Death","Deceptions","Deceptions","Deceptions","Deceptions","Deceptions","Deceptions","Deceptions","Deceptions","Humor","Humor","Humor","Humor","Humor","Humor","Magic","Magic","Magic","Magic","Magic","Magic","Magic","Magic","Marvels","Marvels","Marvels","Marvels","Marvels","Marvels","Marvels","Marvels","Miscellaneous","Miscellaneous","Miscellaneous","Miscellaneous","Miscellaneous","Miscellaneous","Miscellaneous","Myths","Myths","Myths","Myths","Myths","Myths","Myths","Myths","Nature of Life","Nature of Life","Nature of Life","Nature of Life","Nature of Life","Nature of Life","Nature of Life","Ogres","Ogres","Ogres","Ogres","Ogres","Ogres","Ogres","Ogres","Ordaining the Future","Ordaining the Future","Ordaining the Future","Ordaining the Future","Ordaining the Future","Ordaining the Future","Ordaining the Future","Ordaining the Future","Religion","Religion","Religion","Religion","Religion","Religion","Religion","Religion","Reversals of Fortune","Reversals of Fortune","Reversals of Fortune","Reversals of Fortune","Reversals of Fortune","Reversals of Fortune","Reversals of Fortune","Rewards and Punishments","Rewards and Punishments","Rewards and Punishments","Rewards and Punishments","Rewards and Punishments","Rewards and Punishments","Rewards and Punishments","Rewards and Punishments","Sex","Sex","Sex","Sex","Sex","Sex","Sex","Sex","Society","Society","Society","Society","Society","Society","Society","Society","Tabu","Tabu","Tabu","Tabu","Tabu","Tabu","Tabu","Tabu","Tests","Tests","Tests","Tests","Tests","Tests","Tests","Tests","Traits of Character","Traits of Character","Traits of Character","Traits of Character","Traits of Character","Traits of Character","Traits of Character","Wisdom and Folly","Wisdom and Folly","Wisdom and Folly","Wisdom and Folly","Wisdom and Folly","Wisdom and Folly","Wisdom and Folly"],"level":[0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,"NA",0,1,2,3,4,5,"NA"],"n_motifs":[9,64,449,1136,686,191,27,109,4,13,146,215,105,11,1,14,8,38,369,468,100,3,24,5,23,177,221,69,13,10,14,8,47,411,944,592,152,6,62,22,100,1219,1842,534,55,2,92,17,73,339,274,45,2,18,121,1207,3323,1791,372,47,286,10,64,715,1957,1487,802,130,201,4,16,120,170,100,22,10,28,191,1293,2660,1207,231,13,187,1,18,82,55,9,2,2,6,37,269,470,441,385,101,36,5,24,240,382,135,32,1,31,5,36,236,489,190,44,3,49,5,20,115,141,32,2,2,6,30,304,706,281,56,7,120,7,34,339,749,279,46,2,44,5,33,224,430,107,7,1,42,9,63,417,532,182,26,3,15,12,75,774,1332,458,40,7,54,3,4,65,192,86,15,3,20,129,1165,1786,379,22,19]},"columns":[{"id":"chapter_name","name":"chapter_name","type":"character"},{"id":"level","name":"level","type":"numeric","aggregate":"count","format":{"aggregated":{"suffix":" levels"}}},{"id":"n_motifs","name":"n_motifs","type":"numeric","aggregate":"sum"}],"groupBy":["chapter_name"],"dataKey":"41eaf26269494a6ac88b72d23c77465c"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-abcbb36ebf2e6826f16b" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-abcbb36ebf2e6826f16b">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"chapter_name":["Animals","Animals","Animals","Animals","Animals","Animals","Animals","Animals","Captives and Fugitives","Captives and Fugitives","Captives and Fugitives","Captives and Fugitives","Captives and Fugitives","Captives and Fugitives","Captives and Fugitives","Captives and Fugitives","Chance and Fate","Chance and Fate","Chance and Fate","Chance and Fate","Chance and Fate","Chance and Fate","Chance and Fate","Cruelty","Cruelty","Cruelty","Cruelty","Cruelty","Cruelty","Cruelty","Cruelty","Death","Death","Death","Death","Death","Death","Death","Death","Deceptions","Deceptions","Deceptions","Deceptions","Deceptions","Deceptions","Deceptions","Deceptions","Humor","Humor","Humor","Humor","Humor","Humor","Magic","Magic","Magic","Magic","Magic","Magic","Magic","Magic","Marvels","Marvels","Marvels","Marvels","Marvels","Marvels","Marvels","Marvels","Miscellaneous","Miscellaneous","Miscellaneous","Miscellaneous","Miscellaneous","Miscellaneous","Miscellaneous","Myths","Myths","Myths","Myths","Myths","Myths","Myths","Myths","Nature of Life","Nature of Life","Nature of Life","Nature of Life","Nature of Life","Nature of Life","Nature of Life","Ogres","Ogres","Ogres","Ogres","Ogres","Ogres","Ogres","Ogres","Ordaining the Future","Ordaining the Future","Ordaining the Future","Ordaining the Future","Ordaining the Future","Ordaining the Future","Ordaining the Future","Ordaining the Future","Religion","Religion","Religion","Religion","Religion","Religion","Religion","Religion","Reversals of Fortune","Reversals of Fortune","Reversals of Fortune","Reversals of Fortune","Reversals of Fortune","Reversals of Fortune","Reversals of Fortune","Rewards and Punishments","Rewards and Punishments","Rewards and Punishments","Rewards and Punishments","Rewards and Punishments","Rewards and Punishments","Rewards and Punishments","Rewards and Punishments","Sex","Sex","Sex","Sex","Sex","Sex","Sex","Sex","Society","Society","Society","Society","Society","Society","Society","Society","Tabu","Tabu","Tabu","Tabu","Tabu","Tabu","Tabu","Tabu","Tests","Tests","Tests","Tests","Tests","Tests","Tests","Tests","Traits of Character","Traits of Character","Traits of Character","Traits of Character","Traits of Character","Traits of Character","Traits of Character","Wisdom and Folly","Wisdom and Folly","Wisdom and Folly","Wisdom and Folly","Wisdom and Folly","Wisdom and Folly","Wisdom and Folly"],"level":[0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,6,"NA",0,1,2,3,4,5,"NA",0,1,2,3,4,5,"NA"],"n_motifs":[9,64,449,1136,686,191,27,109,4,13,146,215,105,11,1,14,8,38,369,468,100,3,24,5,23,177,221,69,13,10,14,8,47,411,944,592,152,6,62,22,100,1219,1842,534,55,2,92,17,73,339,274,45,2,18,121,1207,3323,1791,372,47,286,10,64,715,1957,1487,802,130,201,4,16,120,170,100,22,10,28,191,1293,2660,1207,231,13,187,1,18,82,55,9,2,2,6,37,269,470,441,385,101,36,5,24,240,382,135,32,1,31,5,36,236,489,190,44,3,49,5,20,115,141,32,2,2,6,30,304,706,281,56,7,120,7,34,339,749,279,46,2,44,5,33,224,430,107,7,1,42,9,63,417,532,182,26,3,15,12,75,774,1332,458,40,7,54,3,4,65,192,86,15,3,20,129,1165,1786,379,22,19]},"columns":[{"id":"chapter_name","name":"chapter_name","type":"character"},{"id":"level","name":"level","type":"numeric","aggregate":"count","format":{"aggregated":{"suffix":" levels"}}},{"id":"n_motifs","name":"n_motifs","type":"numeric","aggregate":"sum"}],"groupBy":["chapter_name"],"dataKey":"41eaf26269494a6ac88b72d23c77465c"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>summary_df &lt;-
   tmi %&gt;%
   group_by(chapter_id,chapter_name,level_0,level_1,level_2,level_3) %&gt;%
@@ -4117,6 +4098,14 @@ tmi %&gt;%
 </div>
 <div id="tale-types" class="section level1">
 <h1>Tale Types</h1>
+<ul>
+<li>Given the ‘type = motif string with equiprobable motifs in forkings’
+working hypothesis, 68245 strings is shocking. Based on the 2250 ATU
+type strings, how many possible strings (ways to tell a tale) exist?
+Explain reasoning</li>
+<li>average number of motifs which constitute a type – the average
+number of forkings (if they can be calculated)</li>
+</ul>
 <hr />
 </div>
 <div id="annotated-tales" class="section level1">
