@@ -125,10 +125,8 @@ rm(m); rm(m_sum); rm(t); rm(t_sum)
 
 ```
 
-A few notes to help understand the relationship between these datasets:
+Note that motifs do not exist in `atu_df` or `atu_combos`, because those datasets contain one row per `atu_id`. Similarly, tale types (`atu_id`s) do not exist in `tmi`, because that dataset contains one row per motif.
 
--   Motifs do not exist in `atu_df`, because that dataset contains one row per `atu_id`. Similarly, tale types (`atu_id`s) do not exist in `tmi`, becuase that dataset contains one row per motif.
--   Not all `atu_id`s in `atu_df` are in `atu_seq`, because some of the tale summaries do not reference any motif IDs.^[E.g. ATU 1342: "*During a cold winter, a satyr (wood spirit) meets a man (boy) who is cold and accommodates him in his cave. The satyr watches the man blowing in his hand and is told that in this way he wants to warm his numb fingers. When the satyr serves up a meal, his guest blows on the food and explains that he wants to cool it. The satyr is afraid of this strange human behavior, blowing hot and cold in the same manner, and chases the man away.*"] This means that an `atu_id` can be present in `atu_df` and `aft`, but not in `atu_seq`, which means the text version of the tale cannot be referenced against an available list of motifs.
 
 #### Intersections of Motifs within Trilogy Datasets
 
@@ -136,20 +134,37 @@ Below is an [upset plot](https://doi.org/10.1109/TVCG.2014.2346248) showing the 
 
 ```{r upset_motif}
 library(UpSetR)
+
 motif_lists <- 
   list(
     tmi = tmi %>% distinct(id) %>% .$id, 
     atu_seq = atu_seq %>% distinct(motif) %>% .$motif, 
     aft = x %>% filter(in_aft) %>% .$motif
   )
+
 upset(
   fromList(motif_lists), 
   order.by = "freq",
   mainbar.y.label = "Intersection Size", 
   sets.x.label = "Motifs per Dataset"
 )
+
 rm(x); rm(motif_lists)
+
+unjoined_motifs <-
+  atu_seq %>% 
+  select(motif) %>%
+  distinct() %>%
+  anti_join(tmi, by = c("motif" = "id"))
 ```
+
+Observations:
+
+- The majority of motifs from the `tmi` are not present in the ATU (i.e. `atu_seq`).  Specifically, 42,457 of the `r n_distinct(tmi$id)` motifs in the `tmi` (`r round(42457/n_distinct(tmi$id) * 100, digits = 1)`%) are __not__ present in the ATU.  This means that the tale types from the ATU make use of only `r 100 - round(42457/n_distinct(tmi$id) * 100, digits = 1)`% of the available motifs from the TMI.
+- Of the motifs which are present in the ATU (`atu_seq`), most (n = `r 2939 + 30`/`r n_distinct(atu_seq$motif)`) do __not__ have corresponding annotated texts in the `aft`.
+- There are a small number of odd instances (n = 34), where a motif ID is present in `atu_seq`, but not in the `tmi`.  In 4 of these instances, there is one or more corresponding tale text in the `aft` which contains a non-`tmi` motif.^[The unmatched motif IDs include: `r paste(unjoined_motifs$motif, collapse = ", ")`. One can inspect these individually and compare them to the `tmi` and find that there are similar motifs that don't quite match.  For instance, there is no "F661.1.1", but there is a "F661.11", or "Skillful Archer Uses Arrow As Boomerang".]
+
+---
 
 #### Intersections of Tale Types within Trilogy Datasets
 
@@ -169,14 +184,13 @@ upset(
 rm(type_lists)
 ```
 
+Observations:
+
+- Not all `atu_id`s in `atu_df` are in `atu_seq`, because some of the tale summaries from `atu_df` do not reference any motif IDs.^[Motifs are extracted from the tale summaries present in the ATU [using the code here](https://github.com/j-hagedorn/trilogy/blob/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/fetch/fetch_taletypes.R#L100-L127).  An example of a tale summary without identified motif IDs is ATU 1342: "*During a cold winter, a satyr (wood spirit) meets a man (boy) who is cold and accommodates him in his cave. The satyr watches the man blowing in his hand and is told that in this way he wants to warm his numb fingers. When the satyr serves up a meal, his guest blows on the food and explains that he wants to cool it. The satyr is afraid of this strange human behavior, blowing hot and cold in the same manner, and chases the man away.*"]. Specifically, 597 tale types in the ATU do not have distinct motif IDs identified. 
+- This means that an `atu_id` can be present in `atu_df` and in `aft`, but not be included in `atu_seq`, which means the text version of the tale cannot be referenced against an available list of motifs.  Fortunately, this only applies to 8 tale types.
+- Most of the tale types from the ATU (`atu_df` and `atu_seq`) are not present in the `aft`.  This underscores the need for more annotated texts.
 
 ```{r anti_joins}
-un <-
-  atu_seq %>% 
-  select(motif) %>%
-  distinct() %>%
-  anti_join(tmi, by = c("motif" = "id"))
-
 un <-
   aft %>%
   select(atu_id) %>%
@@ -184,13 +198,23 @@ un <-
   anti_join(atu_seq %>% select(atu_id) %>% distinct(), by = "atu_id")
 ```
 
+
+-   Given the 'type = motif string with equiprobable motifs in forkings' working hypothesis, 68245 strings as the answer is well, shocking, but that's it.
+-   The next top ten variants seem to refer to the AFT, is that correct? The inserted image has some strange numbers though. First, what does n mean? Or, 46332, which is 1 more than 46331 in the column, which is 110 more than the number of motifs in the TMI?
+-   Practically the same question about all the n values in the 2nd column for the top ten, reproducing the image.
+-   How many percent of the TMI motifs (46222) are there in the AFT?
+-   How many tale types are there in the AFT?
+-   Based on the 2250 ATU type strings, how many possible strings (ways to tell a tale) exist? The suggested number, 68245, is beyond me, please explain your respective reasoning;
+-   I cannot decode one of my slide titles, "ATU type combination network (4696 connections among x types)", does that ring a bell? Could x refer to the 2250 types?
+-   average number of motifs which constitute a type -- the average number of forkings if they can be calculated
+
 ------------------------------------------------------------------------
 
 # Motifs
 
 The `tmi` is comprised of `r n_distinct(tmi$id)` distinct motifs.[^1] It is grouped into `r n_distinct(tmi$chapter_id)` chapters, including: *`r paste(unique(tmi$chapter_name), collapse = ", ")`*.
 
-[^1]: Recall that Yarlott and Finlayson (2016) counted "46,248 motifs and sub-motifs, 41,796 of which have references to tales or tale types." While there is a difference, it is minimal, and it is unclear what they mean by sub-motifs.
+[^1]: Recall that Yarlott and Finlayson (2016) counted "46,248 motifs and sub-motifs, 41,796 of which have references to tales or tale types." While there is a difference in the total count of motifs, it is minimal, and it is unclear what they mean by sub-motifs.
 
 ## Hierarchy {.tabset .tabset-pills}
 
@@ -296,19 +320,4 @@ summary_df <-
 
 
 
-n atu motifs not in tmi
 
-n aft types not in atu
-
-n motifs in tales
-
--   How many types vs motifs are in the ATU and the AFT? How many motifs are there in the TMI (answered)?
--   What's the percentage of motifs used in the ATU as contrasted with the TMI (answered)?
--   Given the 'type = motif string with equiprobable motifs in forkings' working hypothesis, 68245 strings as the answer is well, shocking, but that's it.
--   The next top ten variants seem to refer to the AFT, is that correct? The inserted image has some strange numbers though. First, what does n mean? Or, 46332, which is 1 more than 46331 in the column, which is 110 more than the number of motifs in the TMI?
--   Practically the same question about all the n values in the 2nd column for the top ten, reproducing the image.
--   How many percent of the TMI motifs (46222) are there in the AFT?
--   How many tale types are there in the AFT?
--   Based on the 2250 ATU type strings, how many possible strings (ways to tell a tale) exist? The suggested number, 68245, is beyond me, please explain your respective reasoning;
--   I cannot decode one of my slide titles, "ATU type combination network (4696 connections among x types)", does that ring a bell? Could x refer to the 2250 types?
--   average number of motifs which constitute a type -- the average number of forkings if they can be calculated
