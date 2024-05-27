@@ -39,6 +39,134 @@ This allows us to explicitly reference a version of the data so that any researc
 old_aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/f0fb12d108734847114f17980b05686a26305e38/data/aat.csv")
 ```
 
+# Summary Statistics
+
+The table above shows the distinct count of motifs and tale types in Trilogy datasets. 
+
+```{r overlaps}
+
+x <- 
+  atu_seq %>% 
+  # Get all tale IDs and motif IDs within them
+  select(motif,atu_id) %>% 
+  mutate(in_atu_seq = T) %>%
+  # Pull in all tale IDs present in annotated tales.
+  # Note that counting motifs in annotated tales assumes 
+  # that each tale has each motif in the canonical sequence.
+  left_join(
+    aft %>% select(atu_id) %>% mutate(in_aft = T),
+    by = "atu_id"
+  ) %>%
+  distinct(motif, in_atu_seq, in_aft) %>%
+  mutate(in_aft = if_else(is.na(in_aft),F,T)) %>%
+  # Don't keep multiple rows per motif, count as present (i.e. 'TRUE')
+  group_by(motif, in_atu_seq) %>%
+  filter(in_aft == max(in_aft))
+
+m <-
+  tmi %>%
+  select(motif = id) %>%
+  distinct(motif) %>%
+  left_join(x, by = "motif") %>%
+  mutate(
+    in_tmi = T,
+    in_atu_seq = if_else(is.na(in_atu_seq),F,in_atu_seq),
+    in_aft = if_else(is.na(in_aft),F,in_aft)
+  ) 
+
+m_sum <-
+  m %>%
+  summarise(
+    in_tmi =     sum(in_tmi),
+    in_atu_seq = sum(in_atu_seq),
+    in_aft =     sum(in_aft)
+  ) %>%
+  mutate(unit = "motifs")
+  
+t <-
+  atu_df %>%
+  distinct(atu_id) %>%
+  mutate(in_atu_df = T) %>%
+  left_join(
+    atu_seq %>% 
+      distinct(atu_id) %>%
+      mutate(in_atu_seq = T),
+    by = "atu_id"
+  ) %>%
+  left_join(
+    aft %>%
+      distinct(atu_id) %>%
+      mutate(in_aft = T),
+    by = "atu_id"
+  ) %>%
+  mutate(
+    in_atu_seq = if_else(is.na(in_atu_seq),F,in_atu_seq),
+    in_aft = if_else(is.na(in_aft),F,in_aft)
+  ) 
+
+t_sum <-
+  t %>%
+  summarise(
+    in_atu_df =  sum(in_atu_df),
+    in_atu_seq = sum(in_atu_seq),
+    in_aft =     sum(in_aft)
+  ) %>%
+  mutate(unit = "tale types")
+  
+m_sum %>%
+  bind_rows(t_sum) %>%
+  select(
+    unit, tmi = in_tmi, 
+    atu_df = in_atu_df, atu_seq = in_atu_seq, aft = in_aft
+  ) %>%
+  rmarkdown::paged_table()
+
+
+```
+
+A few notes to help understand the relationship between these datasets:
+
+-   Motifs do not exist in `atu_df`, because that dataset contains one row per `atu_id`. Similarly, tale types (`atu_id`s) do not exist in `tmi`, becuase that dataset contains one row per motif.
+-   Not all `atu_id`s in `atu_df` are in `atu_seq`, because some of the tale summaries do not reference any motif IDs.^[E.g. ATU 1342: "*During a cold winter, a satyr (wood spirit) meets a man (boy) who is cold and accommodates him in his cave. The satyr watches the man blowing in his hand and is told that in this way he wants to warm his numb fingers. When the satyr serves up a meal, his guest blows on the food and explains that he wants to cool it. The satyr is afraid of this strange human behavior, blowing hot and cold in the same manner, and chases the man away.*"] This means that an `atu_id` can be present in `atu_df` and `aft`, but not in `atu_seq`, which means the text version of the tale cannot be referenced against an available list of motifs.
+
+#### Intersections of Motifs within Trilogy Datasets
+
+```{r upset_motif}
+library(UpSetR)
+motif_lists <- 
+  list(
+    tmi = tmi %>% distinct(id) %>% .$id, 
+    atu_seq = atu_seq %>% distinct(motif) %>% .$motif, 
+    aft = x %>% filter(in_aft) %>% .$motif
+  )
+upset(
+  fromList(motif_lists), 
+  order.by = "freq",
+  mainbar.y.label = "Intersection Size", 
+  sets.x.label = "Motifs per Dataset"
+)
+```
+
+#### Intersections of Tale Types within Trilogy Datasets
+
+```{r upset_types}
+type_lists <- 
+  list(
+    atu_df = atu_df %>% distinct(atu_id) %>% .$atu_id, 
+    atu_seq = atu_seq %>% distinct(atu_id) %>% .$atu_id, 
+    aft = aft %>% distinct(atu_id) %>% .$atu_id
+  )
+upset(
+  fromList(type_lists), 
+  order.by = "freq",
+  mainbar.y.label = "Intersection Size", 
+  sets.x.label = "Tale Types per Dataset"
+)
+```
+
+
+------------------------------------------------------------------------
+
 # Motifs
 
 The `tmi` is comprised of `r n_distinct(tmi$id)` distinct motifs.[^1] It is grouped into `r n_distinct(tmi$chapter_id)` chapters, including: *`r paste(unique(tmi$chapter_name), collapse = ", ")`*.
@@ -145,43 +273,7 @@ summary_df <-
 
 ------------------------------------------------------------------------
 
-## Summary Statistics
 
-```{r overlaps}
-
-x <- 
-  atu_seq %>% 
-  select(motif,atu_id) %>% 
-  mutate(in_atu = T) %>%
-  left_join(
-    aft %>% select(atu_id) %>% mutate(in_aft = T),
-    by = "atu_id"
-  ) %>%
-  distinct(motif, in_atu, in_aft) %>%
-  mutate(in_aft = if_else(is.na(in_aft),F,T)) %>%
-  # Don't keep multiple rows per motif, count as present (i.e. 'TRUE')
-  group_by(motif, in_atu) %>%
-  filter(in_aft == max(in_aft))
-
-df <-
-  tmi %>%
-  select(motif = id) %>%
-  distinct(motif) %>%
-  left_join(
-    x,
-    by = "motif"
-  ) %>%
-  mutate(
-    in_tmi = T,
-    in_atu = if_else(is.na(in_atu),F,T),
-    in_aft = if_else(is.na(in_aft),F,T)
-  ) 
-
-sum(df$in_tmi)
-sum(df$in_atu)
-sum(df$in_aft)
-
-```
 
 ```{r anti_joins}
 un <-
@@ -197,22 +289,11 @@ un <-
   anti_join(atu_seq %>% select(atu_id) %>% distinct(), by = "atu_id")
 ```
 
-| Metric         | tmi | atu_df | atu_seq | atu_combos | aft |
-|----------------|----:|-------:|--------:|-----------:|----:|
-| *n* motifs     |     |    N/A |         |        N/A |     |
-| *n* tale types | N/A |        |         |            |     |
-| *n* tales      | N/A |    N/A |         |            |     |
-|                |     |        |         |            |     |
-
-: Summary statistics for Trilogy datasets
-
 Consider visualizing intersections between sets using an [upset graph](https://github.com/hms-dbmi/UpSetR/).
 
-n motifs in types
+
 
 n atu motifs not in tmi
-
-n types in tales
 
 n aft types not in atu
 
