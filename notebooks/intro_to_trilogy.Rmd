@@ -41,7 +41,7 @@ old_aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/f0fb12
 
 # Summary Statistics
 
-The table above shows the distinct count of motifs and tale types in Trilogy datasets. 
+The table below shows the distinct count of motifs and tale types in *Trilogy* datasets. 
 
 ```{r overlaps}
 
@@ -121,6 +121,7 @@ m_sum %>%
   ) %>%
   rmarkdown::paged_table()
 
+rm(m); rm(m_sum); rm(t); rm(t_sum)
 
 ```
 
@@ -130,6 +131,8 @@ A few notes to help understand the relationship between these datasets:
 -   Not all `atu_id`s in `atu_df` are in `atu_seq`, because some of the tale summaries do not reference any motif IDs.^[E.g. ATU 1342: "*During a cold winter, a satyr (wood spirit) meets a man (boy) who is cold and accommodates him in his cave. The satyr watches the man blowing in his hand and is told that in this way he wants to warm his numb fingers. When the satyr serves up a meal, his guest blows on the food and explains that he wants to cool it. The satyr is afraid of this strange human behavior, blowing hot and cold in the same manner, and chases the man away.*"] This means that an `atu_id` can be present in `atu_df` and `aft`, but not in `atu_seq`, which means the text version of the tale cannot be referenced against an available list of motifs.
 
 #### Intersections of Motifs within Trilogy Datasets
+
+Below is an [upset plot](https://doi.org/10.1109/TVCG.2014.2346248) showing the intersection of discrete motifs across the various datasets which comprise the *Trilogy*.
 
 ```{r upset_motif}
 library(UpSetR)
@@ -145,6 +148,7 @@ upset(
   mainbar.y.label = "Intersection Size", 
   sets.x.label = "Motifs per Dataset"
 )
+rm(x); rm(motif_lists)
 ```
 
 #### Intersections of Tale Types within Trilogy Datasets
@@ -162,6 +166,7 @@ upset(
   mainbar.y.label = "Intersection Size", 
   sets.x.label = "Tale Types per Dataset"
 )
+rm(type_lists)
 ```
 
 
