@@ -162,6 +162,7 @@ Observations:
 
 - The majority of motifs from the `tmi` are not present in the ATU (i.e. `atu_seq`).  Specifically, 42,457 of the `r n_distinct(tmi$id)` motifs in the `tmi` (`r round(42457/n_distinct(tmi$id) * 100, digits = 1)`%) are __not__ present in the ATU.  This means that the tale types from the ATU make use of only `r 100 - round(42457/n_distinct(tmi$id) * 100, digits = 1)`% of the available motifs from the TMI.
 - Of the motifs which are present in the ATU (`atu_seq`), most (n = `r 2939 + 30`/`r n_distinct(atu_seq$motif)`) do __not__ have corresponding annotated texts in the `aft`.
+- There are 826 motifs present in the tale types represented by the `aft`.  This is a minuscule `r round(826/n_distinct(tmi$id) * 100, digits = 1)`% of the total available motifs in the `tmi`.
 - There are a small number of odd instances (n = 34), where a motif ID is present in `atu_seq`, but not in the `tmi`.  In 4 of these instances, there is one or more corresponding tale text in the `aft` which contains a non-`tmi` motif.^[The unmatched motif IDs include: `r paste(unjoined_motifs$motif, collapse = ", ")`. One can inspect these individually and compare them to the `tmi` and find that there are similar motifs that don't quite match.  For instance, there is no "F661.1.1", but there is a "F661.11", or "Skillful Archer Uses Arrow As Boomerang".]
 
 ---
@@ -197,16 +198,6 @@ un <-
   distinct() %>%
   anti_join(atu_seq %>% select(atu_id) %>% distinct(), by = "atu_id")
 ```
-
-
--   Given the 'type = motif string with equiprobable motifs in forkings' working hypothesis, 68245 strings as the answer is well, shocking, but that's it.
--   The next top ten variants seem to refer to the AFT, is that correct? The inserted image has some strange numbers though. First, what does n mean? Or, 46332, which is 1 more than 46331 in the column, which is 110 more than the number of motifs in the TMI?
--   Practically the same question about all the n values in the 2nd column for the top ten, reproducing the image.
--   How many percent of the TMI motifs (46222) are there in the AFT?
--   How many tale types are there in the AFT?
--   Based on the 2250 ATU type strings, how many possible strings (ways to tell a tale) exist? The suggested number, 68245, is beyond me, please explain your respective reasoning;
--   I cannot decode one of my slide titles, "ATU type combination network (4696 connections among x types)", does that ring a bell? Could x refer to the 2250 types?
--   average number of motifs which constitute a type -- the average number of forkings if they can be calculated
 
 ------------------------------------------------------------------------
 
@@ -303,6 +294,9 @@ summary_df <-
 ------------------------------------------------------------------------
 
 # Tale Types
+
+-   Given the 'type = motif string with equiprobable motifs in forkings' working hypothesis, 68245 strings is shocking.  Based on the 2250 ATU type strings, how many possible strings (ways to tell a tale) exist? Explain reasoning
+-   average number of motifs which constitute a type -- the average number of forkings (if they can be calculated)
 
 ------------------------------------------------------------------------
 
