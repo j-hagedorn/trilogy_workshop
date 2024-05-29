@@ -35,7 +35,8 @@ output:
 ## `r bsicons::bs_icon("border-style")` Contents
 
 - `tmi`: the *Thompson Motif Index*
-- `atu`: the *Aarne-Thompson-Uther* Tale Type Index
+- `atu_df`: all tale types from the *Aarne-Thompson-Uther* Tale Type Index
+- `atu_seq`: subset of ATU tale types with associated motifs
 - `aft`: some *Annotated Folktales*, seeded with [D.L. Ashliman’s corpus](https://sites.pitt.edu/~dash/folktexts.html)
 
 ## How `r bsicons::bs_icon("stack")`'s parts relate
