@@ -330,7 +330,11 @@ rm(stack)
 ```{r summary_atu_seq}
 summary_atu_seq <- 
   atu_seq %>%
-  group_by(atu_id) %>%
+  left_join(
+    aft %>% distinct(atu_id) %>% mutate(in_aft = T)
+  ) %>%
+  mutate(in_aft = if_else(is.na(in_aft),F,in_aft)) %>%
+  group_by(atu_id,in_aft) %>%
   summarize(
     variants = max(tale_variant),
     n_motifs = n_distinct(motif)
@@ -367,10 +371,29 @@ p + plot_annotation(
 rm(p); rm(p1); rm(p2)
 ```
 
-number of possible types in the AFT
-average type length for the AFT
-average number of variants in the AFT
-average number of forkings in the ATU vs AFT
+The table below shows the average number of tale variants and the average number of motifs per tale type, in both the `atu_seq` and `aft`.
+
+```{r}
+summary_atu_seq %>%
+  summarize(
+    avg_variants = round(mean(variants, na.rm = T), digits = 1),
+    avg_motifs = round(mean(n_motifs, na.rm = T), digits = 1)
+  ) %>%
+  mutate(dataset = "atu_seq") %>%
+  select(dataset,avg_variants,avg_motifs) %>%
+  bind_rows(
+    summary_atu_seq %>%
+      filter(in_aft == T) %>%
+      summarize(
+        avg_variants = round(mean(variants, na.rm = T), digits = 1),
+        avg_motifs = round(mean(n_motifs, na.rm = T), digits = 1)
+      ) %>%
+      mutate(dataset = "aft") %>%
+      select(dataset,avg_variants,avg_motifs)
+  ) %>%
+  rmarkdown::paged_table()
+```
+
 
 ------------------------------------------------------------------------
 
