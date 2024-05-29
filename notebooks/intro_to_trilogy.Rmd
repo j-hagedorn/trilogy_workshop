@@ -134,7 +134,7 @@ The *Trilogy*'s datasets are linked by two key identifiers: motifs (i.e. `motif_
 
 ## Motif Intersections 
 
-Below is an [upset plot](https://doi.org/10.1109/TVCG.2014.2346248) showing the intersection of discrete motifs across the various datasets which comprise the *Trilogy*.
+Below is an [upset plot](https://doi.org/10.1109/TVCG.2014.2346248) showing the intersection of discrete motifs across the various datasets which comprise the *Trilogy*.  Adding the value of the bars above each cell containing a dot should add up to the count of motifs shown in the *Summary Stats* tab. For instance, the `aft` contains 830 motifs (826 + 4).
 
 ```{r upset_motif}
 library(UpSetR)
@@ -173,7 +173,7 @@ Observations:
 
 ## Tale Type Intersections
 
-Below is an [upset plot](https://doi.org/10.1109/TVCG.2014.2346248) showing the intersection of discrete tale types across the various datasets which comprise the *Trilogy*.
+Below is an [upset plot](https://doi.org/10.1109/TVCG.2014.2346248) showing the intersection of discrete tale types across the various datasets which comprise the *Trilogy*.  A quick clarification may be helpful: `atu_df` contains all tale types, while `atu_seq` contains only tale types with motifs identified.  Additional documentation regarding each of these can be found in the [data dictionary](https://github.com/j-hagedorn/trilogy/blob/master/docs/data_dictionary.md#atu).
 
 ```{r upset_types}
 type_lists <- 
@@ -288,7 +288,7 @@ summary_df <-
 
 # Tale Types {.tabset .tabset-pills}
 
-Tale types are derived from the Aarne–Thompson–Uther Index (ATU).  It is represented in the *Trilogy* by three distinct datasets: `atu_df`, `atu_seq`, and `atu_combos`.  Aditional documentation regarding each of these can be found in the [data dictionary](https://github.com/j-hagedorn/trilogy/blob/master/docs/data_dictionary.md#atu).
+Tale types are derived from the Aarne–Thompson–Uther Index (ATU).  It is represented in the *Trilogy* by three distinct datasets: `atu_df`, `atu_seq`, and `atu_combos`.  Additional documentation regarding each of these can be found in the [data dictionary](https://github.com/j-hagedorn/trilogy/blob/master/docs/data_dictionary.md#atu).
 
 ## Types and Descriptions
 
@@ -366,6 +366,11 @@ p + plot_annotation(
 
 rm(p); rm(p1); rm(p2)
 ```
+
+number of possible types in the AFT
+average type length for the AFT
+average number of variants in the AFT
+average number of forkings in the ATU vs AFT
 
 ------------------------------------------------------------------------
 
