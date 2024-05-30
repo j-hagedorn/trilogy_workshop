@@ -376,20 +376,24 @@ The table below shows the average number of tale variants and the average number
 ```{r}
 summary_atu_seq %>%
   summarize(
+    total_variants = sum(variants, na.rm = T),
     avg_variants = round(mean(variants, na.rm = T), digits = 1),
+    med_variants = round(median(variants, na.rm = T), digits = 1),
     avg_motifs = round(mean(n_motifs, na.rm = T), digits = 1)
   ) %>%
   mutate(dataset = "atu_seq") %>%
-  select(dataset,avg_variants,avg_motifs) %>%
+  select(dataset,total_variants,avg_variants,med_variants,avg_motifs) %>%
   bind_rows(
     summary_atu_seq %>%
       filter(in_aft == T) %>%
       summarize(
+        total_variants = sum(variants, na.rm = T),
         avg_variants = round(mean(variants, na.rm = T), digits = 1),
+        med_variants = round(median(variants, na.rm = T), digits = 1),
         avg_motifs = round(mean(n_motifs, na.rm = T), digits = 1)
       ) %>%
       mutate(dataset = "aft") %>%
-      select(dataset,avg_variants,avg_motifs)
+      select(dataset,total_variants,avg_variants,med_variants,avg_motifs)
   ) %>%
   rmarkdown::paged_table()
 ```
