@@ -169,6 +169,8 @@ Observations:
 - There are 826 motifs present among the tale types represented in the `aft` corpus.  This is a minuscule `r round(826/n_distinct(tmi$id) * 100, digits = 1)`% of the total available motifs in the `tmi`.  Fortunately, it can be increased with time and dedication.
 - There are a small number of odd instances (n = 34, *or 30 + 4*), where a motif ID is present in `atu_seq`, but not in the `tmi`.  In 4 of these instances, there is one or more corresponding tale text in the `aft` which contains a non-`tmi` motif.^[The unmatched motif IDs include: `r paste(unjoined_motifs$motif, collapse = ", ")`. One can inspect these individually and compare them to the `tmi` and find that there are similar motifs that don't quite match.  For instance, there is no "F661.1.1", but there is a "F661.11", or "Skillful Archer Uses Arrow As Boomerang".]
 
+`r bsicons::bs_icon("bell-fill")` **Exercise:** [Motif Coverage](#n_motifs)
+
 ------------------------------------------------------------------------
 
 ## Tale Type Intersections
@@ -246,6 +248,8 @@ Note that some motifs are not fit into the hierarchical level format (i.e. `leve
 ------------------------------------------------------------------------
 
 ## Summary
+
+`r bsicons::bs_icon("bell-fill")` **Exercise:** [Summarizing and Filtering](#agg_filt)
 
 The table below shows how many motifs (i.e. `n_motifs`) are in each chapter, and each level (*if you expand the row*).
 
@@ -325,7 +329,7 @@ rm(stack)
 
 ------------------------------------------------------------------------
 
-## Motif Sequences
+## Motif Sequences {#motif_seqs}
 
 ```{r summary_atu_seq}
 summary_atu_seq <- 
@@ -413,7 +417,9 @@ summary_atu_seq %>%
   rmarkdown::paged_table()
 ```
 
-Here, we see that `r 46332 + 15552` (i.e. 46332 + 15552) tale variants out of the total `r sum(summary_atu_seq$variants)` are due to 2 extreme outliers caused by a combinatorial explosion. Without these included, there would be `r sum(summary_atu_seq$variants) - (46332 + 15552)` tale variants, derived from a total of `r n_distinct(summary_atu_seq$atu_id)` tale types in the `atu_seq` dataset.
+Here, we see that `r format(46332 + 15552, scientific = F)` (i.e. 46332 + 15552) tale variants out of the total `r format(sum(summary_atu_seq$variants), scientific = F)` (`r round((46332 + 15552)/sum(summary_atu_seq$variants) * 100, digits = 1)`%) are due to 2 extreme outliers caused by a combinatorial explosion. Without these included, there would be `r sum(summary_atu_seq$variants) - (46332 + 15552)` tale variants, derived from a total of `r n_distinct(summary_atu_seq$atu_id)` tale types in the `atu_seq` dataset.
+
+`r bsicons::bs_icon("bell-fill")` **Exercise:** [Remove Outliers](#filter_atu_seq)
 
 ------------------------------------------------------------------------
 
@@ -425,6 +431,45 @@ Here, we see that `r 46332 + 15552` (i.e. 46332 + 15552) tale variants out of th
 -   Where to go next?
 
 ------------------------------------------------------------------------
+
+# Exercises
+
+## How many motifs? {#n_motifs}
+
+Calculate what percentage of motifs from the TMI are covered:
+
+1. in the ATU's tale types
+2. in the AFT's 
+
+```{r, echo=TRUE}
+
+```
+
+## Summarizing and filtering {#agg_filt}
+
+Make a dataframe that groups the `tmi` by chapter, and contains the following variables:
+
+- the number of distinct motif IDs per chapter
+- the number of rows per chapter
+- the number of motifs including the word "Serpent"
+- the percentage of distinct motifs including the word "Serpent"
+
+```{r, echo = TRUE}
+
+```
+
+
+
+## Just the normal variants, please {#filter_atu_seq}
+
+Create a new data frame of ATU motif sequences that omits outliers.
+
+```{r, echo = TRUE}
+
+```
+
+
+
 
 
 
