@@ -17,7 +17,13 @@ library(tidyverse)
 
 # Load packages and trilogy data sets
 
-Let's start by loading the materials we'll need:
+In this introduction, we'll be walking through the various steps of a data science workflow using the `trilogy` datasets and related tools. Here's a visual of the steps of the data science process:
+
+[![*Figure: Data science process (from R4DS)*](images/data_flow.png){width="457"}](https://r4ds.had.co.nz/explore-intro.html#explore-intro)
+
+In this model of the data science process, you start with data import and tidying. Then, you explore your data with an iterative cycle of transforming, visualizing, and modeling. Finally, you communicate your results with others.
+
+Let's start by importing the tools and data we'll need:
 
 -   the R packages we'll use
 -   the `trilogy` datasets
@@ -43,7 +49,7 @@ old_aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/f0fb12
 
 ## Summary Stats
 
-The table below shows the distinct count of motifs and tale types in *Trilogy* datasets. 
+The table below shows the distinct count of motifs and tale types in *Trilogy* datasets.
 
 ```{r overlaps}
 
@@ -130,11 +136,11 @@ rm(m); rm(m_sum); rm(t); rm(t_sum)
 
 Note that motifs do not exist in `atu_df` or `atu_combos`, because those datasets contain one row per `atu_id`. Similarly, tale types (`atu_id`s) do not exist in `tmi`, because that dataset contains one row per motif.
 
-The *Trilogy*'s datasets are linked by two key identifiers: motifs (i.e. `motif_id`) and tale types (i.e. `atu_id`).  Understanding how these datasets overlap, and the proportion of available motifs and tale types which make them up, is necessary to using them successfully.
+The *Trilogy*'s datasets are linked by two key identifiers: motifs (i.e. `motif_id`) and tale types (i.e. `atu_id`). Understanding how these datasets overlap, and the proportion of available motifs and tale types which make them up, is necessary to using them successfully.
 
-## Motif Intersections 
+## Motif Intersections
 
-Below is an [upset plot](https://doi.org/10.1109/TVCG.2014.2346248) showing the intersection of discrete motifs across the various datasets which comprise the *Trilogy*.  Adding the value of the bars above each cell containing a dot should add up to the count of motifs shown in the *Summary Stats* tab. For instance, the `aft` contains 830 motifs (826 + 4).
+Below is an [upset plot](https://doi.org/10.1109/TVCG.2014.2346248) showing the intersection of discrete motifs across the various datasets which comprise the *Trilogy*. Adding the value of the bars above each cell containing a dot should add up to the count of motifs shown in the *Summary Stats* tab. For instance, the `aft` contains 830 motifs (826 + 4).
 
 ```{r upset_motif}
 library(UpSetR)
@@ -164,10 +170,12 @@ unjoined_motifs <-
 
 Observations:
 
-- The majority of motifs from the `tmi` are not present in the ATU (i.e. `atu_seq`).  Specifically, 42,457 of the `r n_distinct(tmi$id)` motifs in the `tmi` (`r round(42457/n_distinct(tmi$id) * 100, digits = 1)`%) are __not__ present in the ATU.  This means that the tale types from the ATU make use of only `r 100 - round(42457/n_distinct(tmi$id) * 100, digits = 1)`% of the available motifs from the TMI.
-- Of the motifs which are present in the ATU (`atu_seq`), most (n = `r 2939 + 30`/`r n_distinct(atu_seq$motif)`) do __not__ have corresponding annotated texts in the `aft`.
-- There are 826 motifs present among the tale types represented in the `aft` corpus.  This is a minuscule `r round(826/n_distinct(tmi$id) * 100, digits = 1)`% of the total available motifs in the `tmi`.  Fortunately, it can be increased with time and dedication.
-- There are a small number of odd instances (n = 34, *or 30 + 4*), where a motif ID is present in `atu_seq`, but not in the `tmi`.  In 4 of these instances, there is one or more corresponding tale text in the `aft` which contains a non-`tmi` motif.^[The unmatched motif IDs include: `r paste(unjoined_motifs$motif, collapse = ", ")`. One can inspect these individually and compare them to the `tmi` and find that there are similar motifs that don't quite match.  For instance, there is no "F661.1.1", but there is a "F661.11", or "Skillful Archer Uses Arrow As Boomerang".]
+-   The majority of motifs from the `tmi` are not present in the ATU (i.e. `atu_seq`). Specifically, 42,457 of the `r n_distinct(tmi$id)` motifs in the `tmi` (`r round(42457/n_distinct(tmi$id) * 100, digits = 1)`%) are **not** present in the ATU. This means that the tale types from the ATU make use of only `r 100 - round(42457/n_distinct(tmi$id) * 100, digits = 1)`% of the available motifs from the TMI.
+-   Of the motifs which are present in the ATU (`atu_seq`), most (n = `r 2939 + 30`/`r n_distinct(atu_seq$motif)`) do **not** have corresponding annotated texts in the `aft`.
+-   There are 826 motifs present among the tale types represented in the `aft` corpus. This is a minuscule `r round(826/n_distinct(tmi$id) * 100, digits = 1)`% of the total available motifs in the `tmi`. Fortunately, it can be increased with time and dedication.
+-   There are a small number of odd instances (n = 34, *or 30 + 4*), where a motif ID is present in `atu_seq`, but not in the `tmi`. In 4 of these instances, there is one or more corresponding tale text in the `aft` which contains a non-`tmi` motif.[^1]
+
+[^1]: The unmatched motif IDs include: `r paste(unjoined_motifs$motif, collapse = ", ")`. One can inspect these individually and compare them to the `tmi` and find that there are similar motifs that don't quite match. For instance, there is no "F661.1.1", but there is a "F661.11", or "Skillful Archer Uses Arrow As Boomerang".
 
 `r bsicons::bs_icon("bell-fill")` **Exercise:** [Motif Coverage](#n_motifs)
 
@@ -175,7 +183,7 @@ Observations:
 
 ## Tale Type Intersections
 
-Below is an [upset plot](https://doi.org/10.1109/TVCG.2014.2346248) showing the intersection of discrete tale types across the various datasets which comprise the *Trilogy*.  A quick clarification may be helpful: `atu_df` contains all tale types, while `atu_seq` contains only tale types with motifs identified.  Additional documentation regarding each of these can be found in the [data dictionary](https://github.com/j-hagedorn/trilogy/blob/master/docs/data_dictionary.md#atu).
+Below is an [upset plot](https://doi.org/10.1109/TVCG.2014.2346248) showing the intersection of discrete tale types across the various datasets which comprise the *Trilogy*. A quick clarification may be helpful: `atu_df` contains all tale types, while `atu_seq` contains only tale types with motifs identified. Additional documentation regarding each of these can be found in the [data dictionary](https://github.com/j-hagedorn/trilogy/blob/master/docs/data_dictionary.md#atu).
 
 ```{r upset_types}
 type_lists <- 
@@ -195,16 +203,20 @@ rm(unjoined_motifs); rm(type_lists)
 
 Observations:
 
-- Not all `atu_id`s in `atu_df` are in `atu_seq`, because some of the tale summaries from `atu_df` do not reference any motif IDs.^[Motifs are extracted from the tale summaries present in the ATU [using the code here](https://github.com/j-hagedorn/trilogy/blob/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/fetch/fetch_taletypes.R#L100-L127).  An example of a tale summary without identified motif IDs is ATU 1342: "*During a cold winter, a satyr (wood spirit) meets a man (boy) who is cold and accommodates him in his cave. The satyr watches the man blowing in his hand and is told that in this way he wants to warm his numb fingers. When the satyr serves up a meal, his guest blows on the food and explains that he wants to cool it. The satyr is afraid of this strange human behavior, blowing hot and cold in the same manner, and chases the man away.*"]. Specifically, 597 tale types in the ATU do not have distinct motif IDs identified. 
-- This means that an `atu_id` can be present in `atu_df` and in `aft`, but not be included in `atu_seq`, which means the text version of the tale cannot be referenced against an available list of motifs.  Fortunately, this only applies to 8 tale types.
-- There are 174 tale types which occur across all three datasets: `atu_df`, `atu_seq`, and `aft`.
-- Most of the tale types from the ATU (`atu_df` and `atu_seq`) are not present in the `aft`.  This underscores the need for more annotated texts.
+-   Not all `atu_id`s in `atu_df` are in `atu_seq`, because some of the tale summaries from `atu_df` do not reference any motif IDs.[^2]. Specifically, 597 tale types in the ATU do not have distinct motif IDs identified.
+-   This means that an `atu_id` can be present in `atu_df` and in `aft`, but not be included in `atu_seq`, which means the text version of the tale cannot be referenced against an available list of motifs. Fortunately, this only applies to 8 tale types.
+-   There are 174 tale types which occur across all three datasets: `atu_df`, `atu_seq`, and `aft`.
+-   Most of the tale types from the ATU (`atu_df` and `atu_seq`) are not present in the `aft`. This underscores the need for more annotated texts.
+
+[^2]: Motifs are extracted from the tale summaries present in the ATU [using the code here](https://github.com/j-hagedorn/trilogy/blob/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/fetch/fetch_taletypes.R#L100-L127). An example of a tale summary without identified motif IDs is ATU 1342: "*During a cold winter, a satyr (wood spirit) meets a man (boy) who is cold and accommodates him in his cave. The satyr watches the man blowing in his hand and is told that in this way he wants to warm his numb fingers. When the satyr serves up a meal, his guest blows on the food and explains that he wants to cool it. The satyr is afraid of this strange human behavior, blowing hot and cold in the same manner, and chases the man away.*"
 
 ------------------------------------------------------------------------
 
 # Motifs {.tabset .tabset-pills}
 
-The `tmi` is comprised of `r n_distinct(tmi$id)` distinct motifs.^[Recall that Yarlott and Finlayson (2016) counted "46,248 motifs and sub-motifs, 41,796 of which have references to tales or tale types." While there is a difference in the total count of motifs, it is minimal, and it is unclear what they mean by sub-motifs.] It is grouped into `r n_distinct(tmi$chapter_id)` 'chapters', including: *`r paste(unique(tmi$chapter_name), collapse = ", ")`*.  Beneath the chapter level are nested levels of groups, named as follows:
+The `tmi` is comprised of `r n_distinct(tmi$id)` distinct motifs.[^3] It is grouped into `r n_distinct(tmi$chapter_id)` 'chapters', including: *`r paste(unique(tmi$chapter_name), collapse = ", ")`*. Beneath the chapter level are nested levels of groups, named as follows:
+
+[^3]: Recall that Yarlott and Finlayson (2016) counted "46,248 motifs and sub-motifs, 41,796 of which have references to tales or tale types." While there is a difference in the total count of motifs, it is minimal, and it is unclear what they mean by sub-motifs.
 
 -   `level_0` = What Thompson labelled 'Grand divisions', sections divisible by 100.
 -   `level_1` = Smaller divisions end with '0', These are defined at intervals of 10.
@@ -292,11 +304,11 @@ summary_df <-
 
 # Tale Types {.tabset .tabset-pills}
 
-Tale types are derived from the Aarne–Thompson–Uther Index (ATU).  It is represented in the *Trilogy* by three distinct datasets: `atu_df`, `atu_seq`, and `atu_combos`.  Additional documentation regarding each of these can be found in the [data dictionary](https://github.com/j-hagedorn/trilogy/blob/master/docs/data_dictionary.md#atu).
+Tale types are derived from the Aarne–Thompson–Uther Index (ATU). It is represented in the *Trilogy* by three distinct datasets: `atu_df`, `atu_seq`, and `atu_combos`. Additional documentation regarding each of these can be found in the [data dictionary](https://github.com/j-hagedorn/trilogy/blob/master/docs/data_dictionary.md#atu).
 
 ## Types and Descriptions
 
-The `atu_df` is comprised of `r n_distinct(atu_df$atu_id)` distinct tale types, each with a formal identifier (`atu_id`).  It is grouped into `r n_distinct(atu_df$chapter)` chapters, which are broken into sub-sections, or divisions.  There are `r n_distinct(atu_df$division)` divisions in the index.  You can click on the treemap below to explore each chapter and its divisions and subdivisions:
+The `atu_df` is comprised of `r n_distinct(atu_df$atu_id)` distinct tale types, each with a formal identifier (`atu_id`). It is grouped into `r n_distinct(atu_df$chapter)` chapters, which are broken into sub-sections, or divisions. There are `r n_distinct(atu_df$division)` divisions in the index. You can click on the treemap below to explore each chapter and its divisions and subdivisions:
 
 ```{r atu_treemap}
 stack <-
@@ -346,7 +358,9 @@ summary_atu_seq <-
   ungroup() 
 ```
 
-The `atu_seq` dataset has one row for each occurrence of a TMI motif within a tale type from the ATU index.  It was produced by pulling motif IDs from the `tale_type` description from the `atu_df` dataset.  There are an average of `r round(mean(summary_atu_seq$variants), digits = 1)` tale variants^[With some extreme outliers, that is.] and `r round(mean(summary_atu_seq$n_motifs), digits = 1)` motifs per tale type, with the distributions shown below:
+The `atu_seq` dataset has one row for each occurrence of a TMI motif within a tale type from the ATU index. It was produced by pulling motif IDs from the `tale_type` description from the `atu_df` dataset. There are an average of `r round(mean(summary_atu_seq$variants), digits = 1)` tale variants[^4] and `r round(mean(summary_atu_seq$n_motifs), digits = 1)` motifs per tale type, with the distributions shown below:
+
+[^4]: With some extreme outliers, that is.
 
 ```{r atu_hist}
 library(patchwork)
@@ -402,12 +416,13 @@ summary_atu_seq %>%
   rmarkdown::paged_table()
 ```
 
-
 ------------------------------------------------------------------------
 
 ## Tale Variants
 
-For some tales, multiple combinations of motifs are noted as possible permutations of the tale (for example, ATU 605A is a story in which "*A young man, born of an animal... or from a giant... [B631, F611.1.1, F611.1.11-F611.1.15, T516] develops great strength (at the forge, in the forest, in war, by suckling for many years [F611.2.1, F611.2.3]...)*").  In these instances, all of the possible permutations are listed as specific variants of the tale type.  When ranges of motifs are referenced (e.g. *F611.1.11-F611.1.15*, above) all motifs within that range are included and provided with different variants.^[Note that when the suffix "ff." (i.e. *and following*) is appended to a motif, we do not include all motifs following it, since it is unclear precisely what is intended by this convention.]
+For some tales, multiple combinations of motifs are noted as possible permutations of the tale (for example, ATU 605A is a story in which "*A young man, born of an animal... or from a giant... [B631, F611.1.1, F611.1.11-F611.1.15, T516] develops great strength (at the forge, in the forest, in war, by suckling for many years [F611.2.1, F611.2.3]...)*"). In these instances, all of the possible permutations are listed as specific variants of the tale type. When ranges of motifs are referenced (e.g. *F611.1.11-F611.1.15*, above) all motifs within that range are included and provided with different variants.[^5]
+
+[^5]: Note that when the suffix "ff." (i.e. *and following*) is appended to a motif, we do not include all motifs following it, since it is unclear precisely what is intended by this convention.
 
 The table below shows the tale types with the top 1% of variants derived from the method described above:
 
@@ -423,12 +438,17 @@ Here, we see that `r format(46332 + 15552, scientific = F)` (i.e. 46332 + 15552)
 
 ------------------------------------------------------------------------
 
-# Annotated Folktales
+# Annotated Folktales {.tabset .tabset-pills}
 
--   Joining together data sets by primary key
--   First analysis: coverage of motif index in the tale type index
--   Adding citations
--   Where to go next?
+## Summary Table
+
+Reproduce table from JOHD article
+
+## Joining
+
+Joining together data sets by primary key
+
+
 
 ------------------------------------------------------------------------
 
@@ -438,8 +458,8 @@ Here, we see that `r format(46332 + 15552, scientific = F)` (i.e. 46332 + 15552)
 
 Calculate what percentage of motifs from the TMI are covered:
 
-1. in the ATU's tale types
-2. in the AFT's 
+1.  in the ATU's tale types
+2.  in the AFT's
 
 ```{r, echo=TRUE}
 
@@ -449,16 +469,14 @@ Calculate what percentage of motifs from the TMI are covered:
 
 Make a dataframe that groups the `tmi` by chapter, and contains the following variables:
 
-- the number of distinct motif IDs per chapter
-- the number of rows per chapter
-- the number of motifs including the word "Serpent"
-- the percentage of distinct motifs including the word "Serpent"
+-   the number of distinct motif IDs per chapter
+-   the number of rows per chapter
+-   the number of motifs including the word "Serpent"
+-   the percentage of distinct motifs including the word "Serpent"
 
 ```{r, echo = TRUE}
 
 ```
-
-
 
 ## Just the normal variants, please {#filter_atu_seq}
 
@@ -467,12 +485,3 @@ Create a new data frame of ATU motif sequences that omits outliers.
 ```{r, echo = TRUE}
 
 ```
-
-
-
-
-
-
-
-
-
