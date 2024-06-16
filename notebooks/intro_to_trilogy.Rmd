@@ -12,7 +12,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
-library(tidyverse)
+library(tidyverse); library(plotly); library(quanteda)
 ```
 
 # Load packages and trilogy data sets
@@ -440,9 +440,133 @@ Here, we see that `r format(46332 + 15552, scientific = F)` (i.e. 46332 + 15552)
 
 # Annotated Folktales {.tabset .tabset-pills}
 
+Our [article in the Journal of Open Humanities Data](https://openhumanitiesdata.metajnl.com/articles/10.5334/johd.78) describes the Annotated Folktales portion of the Trilogy datasets.  You can find the [original code here](https://github.com/j-hagedorn/trilogy/blob/master/docs/analyses/aft_article_intro/aft_article_johd.Rmd), but we'll run through it below so you can understand how it relates to the data you are using.
+
+```{r summary_aft}
+summary_aft <-
+  aft %>%
+  mutate(
+    n_words = str_count(aft$text, '\\w+'),
+    n_sentences = quanteda::nsentence(text),
+    n_tokens = quanteda::ntoken(text),
+    n_types = quanteda::ntype(text),
+    tokens_per_sentence = n_tokens/n_sentences
+  ) %>%
+  left_join(
+    atu_df %>% select(atu_id,chapter,division,sub_division,tale_name), 
+    by = ("atu_id")
+  ) %>%
+  select(
+    atu_id,chapter,division,tale_name,tale_title,
+    starts_with("n_"),tokens_per_sentence
+  ) 
+
+```
+
 ## Summary Table
 
-Reproduce table from JOHD article
+The table below reproduces [the one published in the JOHD article](https://openhumanitiesdata.metajnl.com/articles/10.5334/johd.78#T2).  Note that a few of the summary statistics vary slightly from what is reported there.  That's because we are using a newer release of the Trilogy data, and some of the data cleaning that has been done since publication affects the tokenization of text from the tales.
+
+```{r summary_aft_tbl}
+
+summary_aft %>%
+  summarize(
+    `Number of tales` = n(),
+    `Number of tale types` = n_distinct(atu_id),
+    `Mean tokens per tale` = round(mean(n_tokens), digits = 1),
+    `Median tokens per tale` = round(median(n_tokens), digits = 1),
+    `Minimum tokens per tale` = round(min(n_tokens), digits = 1),
+    `Maximum tokens per tale` = round(max(n_tokens), digits = 1),
+    `Mean sentences per tale` = round(mean(n_sentences), digits = 1),
+    `Median sentences per tale` = round(median(n_sentences), digits = 1),
+  ) %>%
+  mutate_all(list(~as.character(.))) %>%
+  tibble::rownames_to_column() %>%  
+  pivot_longer(-rowname) %>% 
+  pivot_wider(names_from=rowname, values_from=value) %>%
+  rename(Measure = name, Value = `1`) %>%
+  rmarkdown::paged_table()
+
+```
+
+------------------------------------------------------------------------
+
+## Histogram
+
+We can also reproduce [the histogram from the article](https://openhumanitiesdata.metajnl.com/articles/10.5334/johd.78#F1):
+
+```{r aft_tokens_hist}
+
+summary_aft %>%
+  ggplot(aes(x = n_tokens)) +
+  geom_histogram(binwidth = 250) +
+  labs(
+    caption = "Each bar represents a range of 250 (e.g. 0-250 tokens, 251-500, etc.)",
+    x = "Number of tokens in tale",
+    y = "Number of tales"
+  ) + 
+  xlim(c(-200, 6000)) +
+  theme_minimal() + 
+  theme(
+    plot.title.position = "plot",
+    text = element_text(family = "Mono",size = 13),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y = element_line(size=.1, color="grey" ),
+    panel.grid.minor.y = element_line(size=.1, color="grey" ),
+    axis.text.x.bottom = element_text()
+  )
+
+```
+
+Note that you can update the histogram above by supplying another value to the `x` variable in the call to the `ggplot()` function.
+
+------------------------------------------------------------------------
+
+## Top Tales
+
+```{r}
+summary_aft %>%
+  group_by(atu_id, tale_name) %>%
+  summarize(
+    n_tales = n()
+  ) %>%
+  ungroup() %>%
+  top_n(10,n_tales) %>%
+  mutate(
+    label = paste0(
+      if_else(
+        is.na(word(tale_name,1,5)),
+        tale_name,
+        word(tale_name,1,5)
+      ),
+      " (",atu_id,")"
+    ),
+    label = fct_reorder(label, n_tales)
+  ) %>%
+  ggplot(aes(x = n_tales, y = label)) +
+  geom_point(size = 3) +
+  geom_segment(aes(yend = label), xend = 0) +
+  labs(
+    y = "Tale Type (ATU)",
+    x = "Number of tales"
+  ) +
+  theme_minimal() + 
+  theme(
+    plot.title.position = "plot",
+    text = element_text(family = "Arial Narrow"),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.x = element_line(size=.1, color="grey" ),
+    panel.grid.minor.x = element_line(size=.1, color="grey" ),
+    axis.text.x.bottom = element_text()
+  ) +
+  theme(axis.text=element_text(size=11)) +
+  xlim(0,31)
+```
+
+
+------------------------------------------------------------------------
 
 ## Joining
 
@@ -485,3 +609,4 @@ Create a new data frame of ATU motif sequences that omits outliers.
 ```{r, echo = TRUE}
 
 ```
+
