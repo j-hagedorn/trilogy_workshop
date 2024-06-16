@@ -591,19 +591,5 @@ Now that we've seen the parts of the Trilogy, we can use all 3 parts to answer q
 
 ```{r, echo = TRUE}
 
-x <-
-  tmi %>%
-  filter(str_detect(motif_name,"Tabu: Revealing Knowledge Of Animal Languages")) %>%
-  select(id)
-
-y <- 
-  atu_seq %>%
-  inner_join(x, by = c("motif" = "id")) %>%
-  distinct(atu_id)
-  
-z <-
-  aft %>%
-  inner_join(y, by = "atu_id")
-
 ```
 
