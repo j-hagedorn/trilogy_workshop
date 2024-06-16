@@ -18,7 +18,7 @@ Please complete the following steps prior to attending the workshop, in order to
 **Set up the RStudio environment**
 
 1. [Install R and RStudio](https://posit.co/download/rstudio-desktop/) on the computer you will use at the workshop session. 
-3. Open RStudio and copy/paste the following code in the "Console" area: `install.packages(c("tidyverse","rmarkdown","bslib","revealjs","plotly","reactable","quanteda","UpSetR","patchwork"))`
+3. Open RStudio and copy/paste the following code in the "Console" area: `install.packages(c("tidyverse","rmarkdown","bslib","tidytext","revealjs","plotly","reactable","quanteda","UpSetR","patchwork"))`
 4. In the upper right corner of RStudio, select "Open Project..." and navigate to the folder for this repository ("trilogy_workshop").  Select the `trilogy_workshop.Rproj` file.
 5. Check that the "Files" from this repository now appear in the lower right-hand pane of your RStudio window.
 
