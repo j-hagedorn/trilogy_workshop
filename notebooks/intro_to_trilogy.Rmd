@@ -1,5 +1,5 @@
 ---
-title: "Trilogy Workshop"
+title: "Introduction to the Trilogy"
 author: "Josh Hagedorn" 
 date: "`r Sys.Date()`"
 output: 
@@ -463,6 +463,8 @@ summary_aft <-
 
 ```
 
+`r bsicons::bs_icon("bell-fill")` **Exercise:** [If You Can't Beat Them... Join Them](#try_joins)
+
 ## Summary Table
 
 The table below reproduces [the one published in the JOHD article](https://openhumanitiesdata.metajnl.com/articles/10.5334/johd.78#T2).  Note that a few of the summary statistics vary slightly from what is reported there.  That's because we are using a newer release of the Trilogy data, and some of the data cleaning that has been done since publication affects the tokenization of text from the tales.
@@ -525,54 +527,24 @@ Note that you can update the histogram above by supplying another value to the `
 
 ## Top Tales
 
-```{r}
+Below we can see the top 20 tale types represented in the `aft`, and the number of specific tale texts from each type.  This table reproduces [the one from the JOHD article](https://openhumanitiesdata.metajnl.com/articles/10.5334/johd.78#T3), and expands it to show the top 20 tale types represented and the average number of words per text:
+
+```{r aft_type_tbl}
 summary_aft %>%
   group_by(atu_id, tale_name) %>%
   summarize(
-    n_tales = n()
+    n_tales = n(),
+    avg_words = round(mean(n_words), digits = 1)
   ) %>%
   ungroup() %>%
-  top_n(10,n_tales) %>%
   mutate(
-    label = paste0(
-      if_else(
-        is.na(word(tale_name,1,5)),
-        tale_name,
-        word(tale_name,1,5)
-      ),
-      " (",atu_id,")"
-    ),
-    label = fct_reorder(label, n_tales)
+    tale_name = str_remove_all(tale_name,"\\s*\\([^\\)]+\\)"),
+    tale_name = str_remove(tale_name,"\\(.*")
   ) %>%
-  ggplot(aes(x = n_tales, y = label)) +
-  geom_point(size = 3) +
-  geom_segment(aes(yend = label), xend = 0) +
-  labs(
-    y = "Tale Type (ATU)",
-    x = "Number of tales"
-  ) +
-  theme_minimal() + 
-  theme(
-    plot.title.position = "plot",
-    text = element_text(family = "Arial Narrow"),
-    panel.grid.major.y = element_blank(),
-    panel.grid.minor.y = element_blank(),
-    panel.grid.major.x = element_line(size=.1, color="grey" ),
-    panel.grid.minor.x = element_line(size=.1, color="grey" ),
-    axis.text.x.bottom = element_text()
-  ) +
-  theme(axis.text=element_text(size=11)) +
-  xlim(0,31)
+  top_n(20, n_tales)  %>%
+  arrange(desc(n_tales)) %>%
+  rmarkdown::paged_table()
 ```
-
-
-------------------------------------------------------------------------
-
-## Joining
-
-Joining together data sets by primary key
-
-
 
 ------------------------------------------------------------------------
 
@@ -583,7 +555,7 @@ Joining together data sets by primary key
 Calculate what percentage of motifs from the TMI are covered:
 
 1.  in the ATU's tale types
-2.  in the AFT's
+2.  in the AFT corpus
 
 ```{r, echo=TRUE}
 
@@ -607,6 +579,31 @@ Make a dataframe that groups the `tmi` by chapter, and contains the following va
 Create a new data frame of ATU motif sequences that omits outliers.
 
 ```{r, echo = TRUE}
+
+```
+
+## If you can't beat them... join {#try_joins}
+
+Now that we've seen the parts of the Trilogy, we can use all 3 parts to answer questions.  Here are a few: 
+
+- How many texts from the `aft` contain the motif "Tabu: Revealing Knowledge Of Animal Languages"?
+- How about "Knowledge Of Animal Languages"?
+
+```{r, echo = TRUE}
+
+x <-
+  tmi %>%
+  filter(str_detect(motif_name,"Tabu: Revealing Knowledge Of Animal Languages")) %>%
+  select(id)
+
+y <- 
+  atu_seq %>%
+  inner_join(x, by = c("motif" = "id")) %>%
+  distinct(atu_id)
+  
+z <-
+  aft %>%
+  inner_join(y, by = "atu_id")
 
 ```
 
