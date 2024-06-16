@@ -13,11 +13,12 @@ Please complete the following steps prior to attending the workshop, in order to
 3. [Install Github Desktop](https://desktop.github.com/) on the computer you will use at the workshop session. Open it and follow the instructions to connect it to your personal GitHub account.
 4. Fork this GitHub repository (*by clicking 'Fork' at the top of this page*) to create a copy under your own account.
 5. Clone your forked GitHub repository to your computer so that you can edit the files locally on your own machine. You can do this in GitHub Desktop by selecting *File* |> *Clone repository* and then selecting `{your_username}/trilogy_workshop`
+6. *The day of the workshop*, update your local version from the upstream repository [using these instructions](https://stackoverflow.com/questions/46110615/how-to-sync-your-forked-repo-with-original-repo-in-github-desktop).  Since I will be making changes to the materials as we approach the workshop, this will ensure that your copy is up-to-date.
 
 **Set up the RStudio environment**
 
 1. [Install R and RStudio](https://posit.co/download/rstudio-desktop/) on the computer you will use at the workshop session. 
-3. Open RStudio and copy/paste the following code in the "Console" area: `install.packages(c("tidyverse","rmarkdown","bslib","revealjs","plotly","reactable"))`
+3. Open RStudio and copy/paste the following code in the "Console" area: `install.packages(c("tidyverse","rmarkdown","bslib","revealjs","plotly","reactable","quanteda","UpSetR","patchwork"))`
 4. In the upper right corner of RStudio, select "Open Project..." and navigate to the folder for this repository ("trilogy_workshop").  Select the `trilogy_workshop.Rproj` file.
 5. Check that the "Files" from this repository now appear in the lower right-hand pane of your RStudio window.
 
@@ -26,7 +27,8 @@ Please complete the following steps prior to attending the workshop, in order to
 We'll be going through:
 
 1. [Intro slides](https://j-hagedorn.github.io/trilogy_workshop/slides/slides.html#/)
-2. Example code exercises in [notebooks](https://j-hagedorn.github.io/trilogy_workshop/notebooks/intro_to_trilogy.html)
+2. Example data exploration in [Introduction to the Trilogy](https://j-hagedorn.github.io/trilogy_workshop/notebooks/intro_to_trilogy.html)
+3. A sample use case for using the Trilogy datasets to explore a specific question.
 
 ### Other resources
 
