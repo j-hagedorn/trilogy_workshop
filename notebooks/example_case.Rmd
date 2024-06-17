@@ -1,0 +1,103 @@
+---
+title: "Trilogy Use Case: Tricksters"
+author: "Josh Hagedorn" 
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    code_folding: show
+    theme:
+      version: 5
+      bootswatch: litera
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(tidyverse); library(plotly); library(tidytext)
+# tmi <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/tmi.csv")
+# atu_df <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/atu_df.csv")
+# atu_seq <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/atu_seq.csv")
+# aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/aft.csv")
+
+tmi <- read_csv("../../trilogy/data/tmi.csv")
+atu_df <- read_csv("../../trilogy/data/atu_df.csv")
+atu_seq <- read_csv("../../trilogy/data/atu_seq.csv")
+aft <- read_csv("../../trilogy/data/aft.csv")
+```
+
+# Use case
+
+I'm in the midst of reading Lewis Hyde's *Trickster Makes the World*.
+
+# Get trickster motifs
+
+First, we can try a simple query using the word "trickster"
+
+```{r}
+
+trickster <- 
+  tmi %>% 
+  filter(str_detect(motif_name,regex("trickster", ignore_case = T))) %>%
+  select(id:level)
+
+```
+
+Next, let's expand to look at any motif involving tricks.  We're going to use regular expressions (or, *regex*) to identify patterns in text, and we'll save these as a `list` object:
+
+```{r}
+
+regexes <- list()
+regexes$trick <- "^trick | trick | trick$|^tricks | tricks | tricks$"
+
+tricks <- 
+  tmi %>% 
+  filter(str_detect(motif_name,regex(regexes$trick,ignore_case = T)))
+
+rm(trickster)
+```
+
+In Hyde's book, he identifies a number of other themes which accompany trickster tales, such as:
+
+- __Bait.__ *Synonyms*: bait, trap, snare, catch, net
+- __Stealing.__ *Synonyms*: steal, rob
+- __Transformation.__ *Synonyms*: shape-shift, transform
+- __Boundaries.__ *Synonyms*: border, boundary, cross-roads
+
+We can make some regexes as search strategies, but keep in mind that these should be refined by looking at the data that's returned:
+
+```{r}
+regexes$bait <- "bait|trap|snare|catch| net "
+regexes$steal <- "steal|rob"
+regexes$transform <- "shape-shift|in.*shape|take.*shape|assume.*shape|transform"
+regexes$border <- "border|boundary|boundaries|cross-roads"
+```
+
+We can add to these anytime (since I haven't finished the book yet), but let's start here and develop a subset of the `tmi` which contains trickster-related motifs.
+
+```{r}
+tricks <-
+  tmi %>%
+  select(id:chapter_id) %>%
+  mutate(
+    trickster = if_else(str_detect(motif_name,regex("trickster", ignore_case = T)),T,F),
+    trick = if_else(str_detect(motif_name,regex(regexes$trick,ignore_case = T)),T,F),
+    bait = if_else(str_detect(motif_name,regex(regexes$bait,ignore_case = T)),T,F),
+    steal = if_else(str_detect(motif_name,regex(regexes$steal,ignore_case = T)),T,F),
+    transform = if_else(str_detect(motif_name,regex(regexes$transform,ignore_case = T)),T,F),
+    border = if_else(str_detect(motif_name,regex(regexes$border,ignore_case = T)),T,F)
+  ) %>%
+  rowwise() %>%
+  mutate(any = sum(c_across(trickster:border))) %>%
+  ungroup() %>%
+  filter(any > 0)
+```
+
+# Find tales 
+
+Joins: Get extended set of trickster tales
+
+Identify all tail types, which include these motifs
+
+Pull out metadata of sources and countries represented in the index
+
+Check to see which values are highlighted in trickster tales, since these tales are amoral
+
