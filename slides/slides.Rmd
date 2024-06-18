@@ -22,6 +22,12 @@ output:
   - Create a pipeline for novel, reproducible research
   - Contribute fixes, extensions or annotated texts.
 
+# A need met
+
+`r bsicons::bs_icon("battery")` `r bsicons::bs_icon("three-dots")` `r bsicons::bs_icon("battery-full")`
+
+`r bsicons::bs_icon("heartbreak-fill")` `r bsicons::bs_icon("three-dots")` `r bsicons::bs_icon("heart-fill")`
+
 # What is it?
 
 ## `r bsicons::bs_icon("signpost-split-fill")` Purpose
