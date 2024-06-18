@@ -84,6 +84,11 @@ output:
 - [File issues](https://github.com/j-hagedorn/trilogy/issues/new) if you find errors or have suggestions
 - *Even better*, submit corrections as pull requests `r bsicons::bs_icon("sign-merge-left-fill")`
 
+## `r bsicons::bs_icon("diagram-3-fill")` Expanding Taxonomies
+
+- There are many local motif indexes and tale types not covered here
+- Submit a local motif index to support expansion of the `tmi` or `atu` datasets
+
 ## `r bsicons::bs_icon("tag-fill")` Annotating Tales
 
 - Submit a corpus of [annotated tales](https://github.com/j-hagedorn/trilogy/blob/master/docs/vignettes/getting_started.md#growing-and-refining-the-corpus) as a pull request to grow the `r bsicons::bs_icon("stack")`
@@ -93,3 +98,4 @@ output:
 ## `r bsicons::bs_icon("database-fill-add")` Extending
 
 - Extend the base of knowledge *via* user contributions
+- *Exercise*: File [an issue](https://github.com/j-hagedorn/trilogy/issues/new) with a recommendation for a new tale text corpus to add 
