@@ -247,12 +247,15 @@ tale_words <-
   
 ```
 
-Now we'll need to get some lexicons and join them to our data:
+Now we'll need to get some lexicons and join them to our data.  We'll start with:
+
+- *The NRC Valence, Arousal, and Dominance (VAD) Lexicon*.  A lexicon rating the valence (i.e. positive/pleasure – negative/displeasure), arousal (i.e. active/stimulated – sluggish/bored), and dominance (i.e. powerful/strong – powerless/weak) of ~20k words. See [link](https://saifmohammad.com/WebDocs/VAD-poster.pdf).
+- *The Personal Values Dictionary*. A lexicon which can be used to assess references to value orientations in textual data, such as tweets, blog posts, or status updates.  Based on the [work](https://pubmed.ncbi.nlm.nih.gov/22823292/) of Shalom Schwartz.  See [link](https://onlinelibrary.wiley.com/doi/full/10.1002/per.2294).
 
 ```{r}
 library(textdata)
 vad <- lexicon_nrc_vad()
-eil <- lexicon_nrc_eil()
+# eil <- lexicon_nrc_eil()
 
 values <- 
   read_delim("value_lexicon.txt","\t",skip = 12, col_names = c("word","code")) %>%
@@ -285,6 +288,55 @@ tale_words <-
 
 ```
 
+We can compare the average valence (*pos/neg*), arousal (*active/bored*) and dominance (*strong/weak*) of the tales' language: 
+
+```{r}
+p <- 
+  tale_words %>%
+  group_by(atu_id) %>%
+  summarise(
+    avg_valence = mean(Valence, na.rm = T),
+    avg_arousal = mean(Arousal, na.rm = T),
+    avg_dominance = mean(Dominance, na.rm = T)
+  ) %>%
+  left_join(atu_df %>% select(atu_id,tale_name)) %>%
+  mutate(label = paste0(atu_id,": ", tale_name)) %>%
+  ungroup() %>%
+  ggplot(
+    aes(x = avg_valence, y = avg_arousal, color = avg_dominance, label = label)
+  ) +
+  geom_point() +
+  scale_color_viridis_c() +
+  theme_minimal()
+
+ggplotly(p)
+```
+
+Or we can check to see which values are highlighted in trickster tales, since these tales are considered by Hyde to be amoral and we might thus expect to see an even dispersion:
+
+```{r}
+p <-
+  tale_words %>%
+  group_by(value_desc) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  mutate(pct = round(n/sum(n) * 100, digits = 1)) %>%
+  filter(!is.na(value_desc)) %>%
+  ggplot(aes(x = value_desc, y = pct)) +
+  geom_col() +
+  theme_minimal()
+
+ggplotly(p)
+```
+
+Observations:
+
+- It makes sense that universalism is low, since tricksters are known to confuse clear polarities/systems. 
+- It's unexpected (at least to me) to see *benevolence* score so high, as well as *tradition*, when we might expect trickster tales to be more balanced in these areas.  May want to dive in and see where this occurs.
+- We might also want to know whether the proportion of these values in trickster tales are similar to those in the `atu` as a whole.  This graph just shows us their relationship within the subset of tales we filtered for.
+
+
+# Resources
 
 A few additional resources for text analysis in R:
 
@@ -292,5 +344,5 @@ A few additional resources for text analysis in R:
 - [Supervised Machine Learning for Text Analysis in R](https://smltar.com/)
 
 
-Check to see which values are highlighted in trickster tales, since these tales are amoral
+
 
