@@ -28,7 +28,7 @@ We'll be going through:
 
 1. [Intro slides](https://j-hagedorn.github.io/trilogy_workshop/slides/slides.html#/)
 2. Example data exploration in [Introduction to the Trilogy](https://j-hagedorn.github.io/trilogy_workshop/notebooks/intro_to_trilogy.html)
-3. A sample use case for using the Trilogy datasets to explore a specific question.
+3. A [sample use case](https://j-hagedorn.github.io/trilogy_workshop/notebooks/example_case.html) for using the Trilogy datasets to explore a specific question.
 
 ### Other resources
 
