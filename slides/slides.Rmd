@@ -14,10 +14,11 @@ output:
 
 # Overview
 
-- Introduction (*10:30-11:00*)
+- Computer setup and workshop structure (*10:30-10:40*)
+- Introduction (*10:40-11:00*)
 - Exploring the Trilogy data (*11:00-12:30*)
 - A sample use case (*13:40-14:40*)
-- Ad hoc questions and next steps (*14:40-15:40*)
+- Developing your own analysis questions (*14:40-15:40*)
 
 # Soon you'll know...
 
@@ -67,6 +68,7 @@ output:
 - These taxonomies were designed for `r bsicons::bs_icon("journal-text")`, not `r bsicons::bs_icon("file-code")`
 - Motifs are not a periodic table of elements
 - Lacks oral elements of tale-telling (*e.g. pauses, sighs*)
+- In English
 - A minimum, common dataset, it lacks meta-data from more complex collections
 
 # How can you use it?
