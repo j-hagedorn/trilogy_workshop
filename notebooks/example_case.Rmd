@@ -24,20 +24,21 @@ atu_seq <- read_csv("../../trilogy/data/atu_seq.csv")
 aft <- read_csv("../../trilogy/data/aft.csv")
 ```
 
-# Use case
 
-I'm in the midst of reading Lewis Hyde's *Trickster Makes the World*.
+I'm in the midst of reading Lewis Hyde's *Trickster Makes the World*.  It's great, and I want to see whether the themes it identifies can be substantiated by existing folklore motifs and tale types.
 
-# Get trickster motifs
+# Transforming the data
 
-First, we can try a simple query using the word "trickster"
+## Get trickster motifs
+
+First, we can try a simple query using the word "trickster":
 
 ```{r}
 
 trickster <- 
   tmi %>% 
   filter(str_detect(motif_name,regex("trickster", ignore_case = T))) %>%
-  select(id:level)
+  select(id:level) 
 
 ```
 
@@ -71,7 +72,7 @@ regexes$transform <- "shape-shift|in.*shape|take.*shape|assume.*shape|transform"
 regexes$border <- "border|boundary|boundaries|cross-roads"
 ```
 
-We can add to these anytime (since I haven't finished the book yet), but let's start here and develop a subset of the `tmi` which contains trickster-related motifs.
+We can add to these anytime (*after all, I haven't even finished the book yet*), but let's start here and develop a subset of the `tmi` which contains trickster-related motifs.
 
 ```{r}
 tricks <-
@@ -91,13 +92,205 @@ tricks <-
   filter(any > 0)
 ```
 
-# Find tales 
+## Find related tale types 
 
-Joins: Get extended set of trickster tales
+Assuming this motif list is comprehensive (though it's not), we can use it to find tales that contain the motifs.:
 
-Identify all tail types, which include these motifs
+```{r}
+# Get the tale IDs
+tale_list <- 
+  atu_seq %>%
+  inner_join(tricks, by = c("motif" = "id")) %>%
+  distinct(atu_id) %>%
+  .$atu_id
 
-Pull out metadata of sources and countries represented in the index
+# Filter the atu_seq data and add descriptive data for reference
+trickster_tales <-
+  atu_seq %>%
+  filter(atu_id %in% tale_list) %>%
+  filter(tale_variant == 1) %>%
+  select(-tale_variant) %>%
+  left_join(atu_df %>% select(atu_id,tale_name)) %>%
+  left_join(tmi %>% select(id,level_1:level_3), by = c("motif" = "id")) %>%
+  select(atu_id,tale_name,motif_order,motif,starts_with("level_")) %>%
+  ungroup()
+```
+
+# Exploratory Analysis
+
+## Common motifs
+
+What are the most common motifs in tales that include trickster themes?
+
+```{r}
+trickster_tales %>%
+  group_by(motif) %>%
+  summarize(n = n_distinct(atu_id)) %>%
+  left_join(tmi %>% select(id,motif_name),by = c("motif" = "id")) %>%
+  select(motif,motif_name,n) %>%
+  slice_max(order_by = n, n = 15,with_ties = F) %>%
+  rmarkdown::paged_table()
+  
+```
+
+What if we group by the sections in which these motifs occur?
+
+```{r}
+trickster_tales %>%
+  group_by(level_1) %>%
+  summarize(n_tales = n_distinct(atu_id)) %>%
+  left_join(
+    tmi %>% 
+      filter(level == 1) %>%
+      select(level_1,motif_name),
+    by = c("level_1")
+  ) %>%
+  select(level_1,motif_name,n_tales) %>%
+  slice_max(order_by = n_tales, n = 30,with_ties = F) %>%
+  rmarkdown::paged_table() 
+```
+
+Observations:
+
+- Some of these are just common motifs (e.g. L160, H1370)
+- The 'trickster' behavior may not involve a deity, so we'll need to subset our original dataset to get better results
+
+## Co-occurence
+
+To look at all motif co-occurrences, we can make a network:
+
+```{r}
+library(tidygraph); library(visNetwork)
+
+nodes <-
+  trickster_tales %>%
+  distinct(level_1) %>%
+  left_join(
+    tmi %>% 
+      filter(level == 1) %>%
+      select(level_1,motif_name),
+    by = c("level_1")
+  ) %>%
+  mutate(id = row_number()) %>%
+  select(id, label = level_1, title = motif_name)
+  
+edges <- 
+  trickster_tales %>%
+  select(atu_id,from = level_1) %>%
+  group_by(atu_id) %>%
+  mutate(to = lead(from, default = from[1])) %>%
+  filter(from != to) %>%
+  group_by(from,to) %>%
+  summarise(n = n_distinct(atu_id)) %>%
+  ungroup() %>%
+  left_join(nodes %>% select(id,label), by = c("from" = "label")) %>%
+  select(-from) %>%
+  rename(from = id) %>%
+  left_join(nodes %>% select(id,label), by = c("to" = "label")) %>%
+  select(-to) %>%
+  rename(to = id) %>%
+  select(from,to,width = n)
+
+graph <- 
+  tbl_graph(nodes,edges) %>%
+  activate(nodes) %>%
+  mutate(
+    btwn = centrality_betweenness(),
+    eigen = centrality_eigen(),
+    group = group_edge_betweenness(),
+    value = scales::rescale(btwn, to = c(0,10))
+  ) %>%
+  activate(edges) %>%
+  mutate(
+    e_btwn = centrality_edge_betweenness(),
+    width = scales::rescale(e_btwn, to = c(0.5,6))
+  )
+
+rm(nodes); rm(edges)
+  
+```
+
+And graph it interactively:
+
+```{r}
+library(visNetwork)
+network <- toVisNetworkData(graph)
+visNetwork(nodes = network$nodes, edges = network$edges) %>%
+  visEdges(arrows = 'middle') %>%
+  visIgraphLayout(layout = "layout_with_fr")
+```
+
+Some variations:
+
+- choose a different layout [from igraph](https://r.igraph.org/articles/igraph.html?q=layout#layouts-and-plotting)
+- apply different measures to the `value` to resize nodes, to the `width` argument to resize edges, or to the `group` argument to change the colors
+- additional resources can be found in the [tidygraph](https://github.com/thomasp85/tidygraph) package
+
+We can also inspect the node and edge measures in a table:
+
+```{r}
+graph %>% activate(nodes) %>% as_tibble() %>% View()
+```
+
+## Concepts
+
+We can also explore more abstract concepts present within the tales by mapping their language to standardized lexicons.  First, we need to unpack (a.k.a. *tokenize*) the data so it has one word per row.  This time, we'll use the longer tale descriptions from the `atu_df`:
+
+```{r}
+library(tidytext)
+
+tale_words <-
+  atu_df %>%
+  filter(atu_id %in% tale_list) %>%
+  select(atu_id, tale_type) %>%
+  unnest_tokens(word, tale_type)
+  
+```
+
+Now we'll need to get some lexicons and join them to our data:
+
+```{r}
+library(textdata)
+vad <- lexicon_nrc_vad()
+eil <- lexicon_nrc_eil()
+
+values <- 
+  read_delim("value_lexicon.txt","\t",skip = 12, col_names = c("word","code")) %>%
+  left_join(
+    read_delim("value_lexicon.txt","\t",skip = 1,n_max = 10,col_names = c("code","value")),
+    by = "code"
+  ) %>%
+  mutate(
+    value = str_remove(value,"^Values_"),
+    value_desc = case_match(
+      value,
+      "AC" ~ "achievement", 
+      "BE" ~ "benevolence",
+      "CO" ~ "conformity",
+      "HE" ~ "hedonism",
+      "PO" ~ "power",
+      "SD" ~ "self-direction",
+      "SE" ~ "security",
+      "ST" ~ "stimulation",
+      "TR" ~ "tradition",
+      "UN" ~ "universalism"
+    )
+  ) %>%
+  select(-code)
+
+tale_words <-
+  tale_words %>%
+  left_join(vad, by = c("word" = "Word")) %>%
+  left_join(values)
+
+```
+
+
+A few additional resources for text analysis in R:
+
+- [Tidy Text Mining](https://www.tidytextmining.com/)
+- [Supervised Machine Learning for Text Analysis in R](https://smltar.com/)
+
 
 Check to see which values are highlighted in trickster tales, since these tales are amoral
 
