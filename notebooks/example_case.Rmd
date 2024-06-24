@@ -13,15 +13,11 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 library(tidyverse); library(plotly); library(tidytext)
-# tmi <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/tmi.csv")
-# atu_df <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/atu_df.csv")
-# atu_seq <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/atu_seq.csv")
-# aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/aft.csv")
+tmi <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/tmi.csv")
+atu_df <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/atu_df.csv")
+atu_seq <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/atu_seq.csv")
+aft <- read_csv("https://raw.githubusercontent.com/j-hagedorn/trilogy/d57c2cefd0b216c8ce5c251f618c3e931c732d0a/data/aft.csv")
 
-tmi <- read_csv("../../trilogy/data/tmi.csv")
-atu_df <- read_csv("../../trilogy/data/atu_df.csv")
-atu_seq <- read_csv("../../trilogy/data/atu_seq.csv")
-aft <- read_csv("../../trilogy/data/aft.csv")
 ```
 
 
@@ -197,8 +193,9 @@ graph <-
   mutate(
     btwn = centrality_betweenness(),
     eigen = centrality_eigen(),
+    degree = centrality_degree(),
     group = group_edge_betweenness(),
-    value = scales::rescale(btwn, to = c(0,10))
+    value = scales::rescale(eigen, to = c(0,10))
   ) %>%
   activate(edges) %>%
   mutate(
@@ -217,7 +214,7 @@ library(visNetwork)
 network <- toVisNetworkData(graph)
 visNetwork(nodes = network$nodes, edges = network$edges) %>%
   visEdges(arrows = 'middle') %>%
-  visIgraphLayout(layout = "layout_with_fr")
+  visIgraphLayout(layout = "layout_with_sugiyama")
 ```
 
 Some variations:
